@@ -1,7 +1,8 @@
 
-# Use latest Fedora image as the base
-FROM fedora:latest
+# Use latest Fedora image as the base, change to jboss:base once available
+FROM fedora:20
 
+MAINTAINER Bela Ban <belaban@yahoo.com>
 
 # Update base image
 ## Disabled because yum update /clean fail: https://github.com/coreos/coreos-overlay/issues/474

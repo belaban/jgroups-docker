@@ -2,6 +2,7 @@
 *.iws
 *.ipr
 *.iml
+.git
 .project
 .classpath
 .factorypath
