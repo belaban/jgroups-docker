@@ -17,9 +17,8 @@ RUN yum -y install java-1.8.0-openjdk-devel
 RUN groupadd -r jboss -g 1000
 RUN useradd -u 1000 -r -g jboss -m -d /opt/jboss -s /sbin/nologin -c "JBoss user" jboss
 
-# Set the HOME env variable
 ENV HOME /opt/jboss
-
+ENV JGROUPS_HOME $HOME/JGroups
 
 # Set the JAVA_HOME variable to make it clear where Java is located
 ENV JAVA_HOME /usr/lib/jvm/java
@@ -27,6 +26,8 @@ ENV JAVA_HOME /usr/lib/jvm/java
 # Set the HOME env variable
 WORKDIR /opt/jboss
 
+# Exposes ports used by JGroups
+## EXPOSE port1 port2 .. port-n
 
 # Run everything below as the jboss user
 USER jboss
