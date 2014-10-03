@@ -24,7 +24,7 @@ To run it:
       chat [-name name], e.g. chat -name A
 
 Run the Chat application in multiple containers on the same host and
-they will form a cluster. Typing a mesage into one Chat will send it
+they will form a cluster. Typing a message into one Chat will send it
 to all other chats
 
 
@@ -81,7 +81,7 @@ Or a lock holder can be killed:
 
 1. A: `lock printer`
 2. B: `lock printer`
-3. Kill A // B will now get the lock on "printer"
+3. Kill A. B will now get the lock on "printer"
 
     
 
@@ -89,6 +89,16 @@ Or a lock holder can be killed:
 
 ## Distributed counters
 
+Distributed counters are counters will can be atomically incremented,
+decremented, compare-and-set etc *across a cluster*.
+
+To run the demo:
+
+    count [-name name]
+
+Run multiple instances in different containers. The demo uses a
+counter named "mycounter" and there's a command prompt which shows the
+commands to be executed.
 
 
 ## Traffic across sites

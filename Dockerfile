@@ -43,6 +43,7 @@ COPY probe.sh   $HOME/bin/
 COPY jgroups.sh $HOME/bin/
 COPY chat.sh    $HOME/bin/chat
 COPY lock.sh    $HOME/bin/lock
+COPY count.sh   $HOME/bin/count
 
 RUN chown -R jgroups.jgroups $HOME/*
 
@@ -58,6 +59,6 @@ RUN curl -sS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/3.5
 # CMD /bin/bash -c "cat $HOME/README.md"
 #CMD /bin/bash
 #CMD echo "To run the demos, please read README.md" && /bin/bash
-CMD cat demos.txt && /bin/bash
+CMD clear && cat demos.txt && /bin/bash
 
 

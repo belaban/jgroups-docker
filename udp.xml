@@ -49,7 +49,7 @@
     <MERGE3 max_interval="30000"
             min_interval="10000"/>
     <FD_SOCK/>
-    <FD_ALL/>
+    <FD_ALL timeout="10000" interval="3000"/>
     <VERIFY_SUSPECT timeout="1500"  />
     <BARRIER />
     <pbcast.NAKACK2 xmit_interval="500"
@@ -76,4 +76,5 @@
     <RSVP/>
     <pbcast.STATE_TRANSFER  />
     <CENTRAL_LOCK />
+    <COUNTER/>
 </config>
