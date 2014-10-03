@@ -45,6 +45,33 @@ To run the lock demo, type:
 
        lock [-name  name]
 
+Typing `help` into the shell shows a few commands:
+
+    [jgroups@b21d0fa6c79d ~]$ lock -name A
+
+    -------------------------------------------------------------------
+    GMS: address=A, cluster=lock-cluster, physical address=172.17.0.178:52519
+    -------------------------------------------------------------------
+    : help
+
+    LockServiceDemo [-props properties] [-name name]
+    Valid commands:
+
+    lock (<lock name>)+
+    unlock (<lock name> | "ALL")+
+    trylock (<lock name>)+ [<timeout>]
+
+    Example:
+    lock lock lock2 lock3
+    unlock all
+    trylock bela michelle 300
+
+    server locks:
+
+    my locks: 
+    : 
+
+
 
 
 ## Distributed counters
