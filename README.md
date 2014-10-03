@@ -56,20 +56,15 @@ Typing `help` into the shell shows a few commands:
 
     LockServiceDemo [-props properties] [-name name]
     Valid commands:
-
-    lock (<lock name>)+
-    unlock (<lock name> | "ALL")+
-    trylock (<lock name>)+ [<timeout>]
+        lock (<lock name>)+
+        unlock (<lock name> | "ALL")+
+        trylock (<lock name>)+ [<timeout>]
 
     Example:
-    lock lock lock2 lock3
-    unlock all
-    trylock bela michelle 300
-
-    server locks:
-
-    my locks: 
-    : 
+        lock lock lock2 lock3
+        unlock all
+        trylock bela michelle 300
+    :
 
 If you start instances A and B, you can try out the following:
 
