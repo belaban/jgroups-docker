@@ -8,28 +8,45 @@ MAINTAINER Bela Ban <belaban@yahoo.com>
 ## Disabled because yum update /clean fail: https://github.com/coreos/coreos-overlay/issues/474
 #RUN yum -y update && yum clean all
 
-RUN yum -y install java-1.8.0-openjdk-devel
+RUN yum -y install \
+    java-1.8.0-openjdk-devel \
+    unzip
 
 # Create a user and group used to launch processes
 # The user ID 1000 is the default for the first "regular" user on Fedora/RHEL,
 # so there is a high chance that this ID will be equal to the current user
 # making it easier to use volumes (no permission issues)
-RUN groupadd -r jboss -g 1000
-RUN useradd -u 1000 -r -g jboss -m -d /opt/jboss -s /sbin/nologin -c "JBoss user" jboss
+RUN groupadd -r jgroups -g 1000
+RUN useradd -u 1000 -r -g jgroups -m -d /opt/jgroups -s /sbin/nologin -c "jgroups user" jgroups
 
-ENV HOME /opt/jboss
-ENV JGROUPS_HOME $HOME/JGroups
-
-# Set the JAVA_HOME variable to make it clear where Java is located
+ENV HOME /opt/jgroups
+ENV JGROUPS_VERSION 3.5.1.Final
 ENV JAVA_HOME /usr/lib/jvm/java
 
 # Set the HOME env variable
-WORKDIR /opt/jboss
+WORKDIR /opt/jgroups
+
+RUN mkdir $HOME/bin
+
 
 # Exposes ports used by JGroups
 ## EXPOSE port1 port2 .. port-n
 
-# Run everything below as the jboss user
-USER jboss
 
-CMD ["/bin/bash"]
+COPY README.md  $HOME/
+COPY udp.xml    $HOME/
+COPY log4j2.xml $HOME/
+
+RUN chown -R jgroups.jgroups $HOME/*
+
+# Run everything below as the jgroups user. Unfortunately, USER is only observed by RUN, 
+# *not* by ADD or COPY !!
+USER jgroups
+
+RUN curl -sS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/3.5.1.Final/jgroups-3.5.1.Final.jar
+
+
+#CMD ["/bin/bash", "-c cat $HOME/README.md"]
+# CMD /bin/bash -c "cat $HOME/README.md"
+CMD /bin/bash
+
