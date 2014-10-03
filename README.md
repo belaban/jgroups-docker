@@ -4,8 +4,16 @@ jgroups-docker
 ==============
 
 Dockerfile for a container containing JGroups and a couple of
-demos. How to run the demos is described below
+demos. 
 
+To run the image directly, execute
+    docker -it belaban/jgroups
+
+To build the image, run
+    docker build .
+
+
+The following demos are available:
 
 Chat
 ----
