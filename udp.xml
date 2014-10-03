@@ -12,12 +12,12 @@
         xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
     <UDP
          mcast_port="${jgroups.udp.mcast_port:45588}"
-         ip_ttl="0"
+         ip_ttl="8"
          tos="8"
-         ucast_recv_buf_size="5M"
-         ucast_send_buf_size="5M"
-         mcast_recv_buf_size="5M"
-         mcast_send_buf_size="5M"
+         ucast_recv_buf_size="200k"
+         ucast_send_buf_size="200k"
+         mcast_recv_buf_size="200k"
+         mcast_send_buf_size="200k"
          max_bundle_size="64K"
          max_bundle_timeout="30"
          enable_diagnostics="true"

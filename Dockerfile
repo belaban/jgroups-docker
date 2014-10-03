@@ -22,6 +22,7 @@ RUN useradd -u 1000 -r -g jgroups -m -d /opt/jgroups -s /sbin/nologin -c "jgroup
 ENV HOME /opt/jgroups
 ENV JGROUPS_VERSION 3.5.1.Final
 ENV JAVA_HOME /usr/lib/jvm/java
+ENV PATH $PATH:$HOME/bin
 
 # Set the HOME env variable
 WORKDIR /opt/jgroups
@@ -36,6 +37,9 @@ RUN mkdir $HOME/bin
 COPY README.md  $HOME/
 COPY udp.xml    $HOME/
 COPY log4j2.xml $HOME/
+COPY probe.sh   $HOME/bin/
+COPY jgroups.sh $HOME/bin/
+COPY chat.sh    $HOME/bin/chat
 
 RUN chown -R jgroups.jgroups $HOME/*
 
@@ -43,6 +47,7 @@ RUN chown -R jgroups.jgroups $HOME/*
 # *not* by ADD or COPY !!
 USER jgroups
 
+RUN chmod u+x $HOME/bin/*
 RUN curl -sS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/3.5.1.Final/jgroups-3.5.1.Final.jar
 
 
