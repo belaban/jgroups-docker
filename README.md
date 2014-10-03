@@ -71,7 +71,17 @@ Typing `help` into the shell shows a few commands:
     my locks: 
     : 
 
-So let's start 2 instances, A and B, and acquire lock "bela" on A:
+If you start instances A and B, you can try out the following:
+
+1. A: `lock printer`
+2. B: `lock printer`   // will block
+3. A: `unlock printer` // now B will get the lock
+
+Or a lock holder can be killed:
+
+1. A: `lock printer`
+2. B: `lock printer`
+3. Kill A // B will now get the lock on "printer"
 
     
 
