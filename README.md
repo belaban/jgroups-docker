@@ -96,4 +96,11 @@ counter named "mycounter" and there's a command prompt which shows the
 commands to be executed.
 
 
+Questions can be asked on the users or dev mailing lists:
+https://sourceforge.net/p/javagroups/mailman.
+
+Enjoy !
+
+Bela Ban
+
 
