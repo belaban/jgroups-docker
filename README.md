@@ -38,6 +38,9 @@ A typical use case is to lock a resource so that only 1 thread in a
 given node in the cluster can access it. Should a node crash while
 holding a lock, the lock is released immediately.
 
+For more details, see the section on distributed locks at
+http://www.jgroups.org/manual/index.html#LockService.
+
 To run the lock demo, type:
 
        lock [-name  name]
