@@ -40,6 +40,7 @@ COPY log4j2.xml $HOME/
 COPY probe.sh   $HOME/bin/
 COPY jgroups.sh $HOME/bin/
 COPY chat.sh    $HOME/bin/chat
+COPY lock.sh    $HOME/bin/lock
 
 RUN chown -R jgroups.jgroups $HOME/*
 

@@ -74,7 +74,6 @@
          min_threshold="0.4"/>
     <FRAG2 frag_size="60K"  />
     <RSVP/>
-    <!--pbcast.STATE /-->
     <pbcast.STATE_TRANSFER  />
-    <!-- pbcast.FLUSH  /-->
+    <CENTRAL_LOCK />
 </config>

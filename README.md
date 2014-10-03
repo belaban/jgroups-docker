@@ -30,6 +30,19 @@ to all other chats
 
 ## Distributed locks
 
+Distributed locks are implementations of
+`java.util.concurrent.locks.Lock` and provide locks that can be
+accessed from all nodes in a cluster. 
+
+A typical use case is to lock a resource so that only 1 thread in a
+given node in the cluster can access it. Should a node crash while
+holding a lock, the lock is released immediately.
+
+To run the lock demo, type:
+
+       lock [-name  name]
+
+
 
 ## Distributed counters
 
