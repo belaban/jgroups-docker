@@ -101,7 +101,4 @@ counter named "mycounter" and there's a command prompt which shows the
 commands to be executed.
 
 
-## Traffic across sites
-
-
 

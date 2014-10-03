@@ -2,7 +2,11 @@
 
 #!/bin/bash
 
-CP=$HOME/jgroups-$JGROUPS_VERSION.jar
+#CP=$HOME/lib/*
+
+for i in $HOME/lib/*.jar
+   do CP=$CP:${i}
+done
 
 
 if [ -f $HOME/log4j.properties ]; then

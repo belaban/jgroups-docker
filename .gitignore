@@ -11,10 +11,6 @@
 .DS_Store
 classes/
 build.properties
-dist/
-atlassian*
-keystore/
 tmp/
-bla*.java
 
 

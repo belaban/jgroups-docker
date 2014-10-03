@@ -28,7 +28,7 @@ ENV PATH $PATH:$HOME/bin
 WORKDIR /opt/jgroups
 
 RUN mkdir $HOME/bin
-#RUN echo "hello from bela" >> /etc/motd
+RUN mkdir $HOME/lib
 
 
 # Exposes ports used by JGroups
@@ -51,8 +51,13 @@ RUN chown -R jgroups.jgroups $HOME/*
 # *not* by ADD or COPY !!
 USER jgroups
 
+RUN cd $HOME/lib && curl -L -O \
+https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-core/2.0/log4j-core-2.0.jar && \
+curl -L -O https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-api/2.0/log4j-api-2.0.jar
+
 RUN chmod u+x $HOME/bin/*
-RUN curl -sS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/3.5.1.Final/jgroups-3.5.1.Final.jar
+RUN cd lib && curl -sS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/3.5.1.Final/jgroups-3.5.1.Final.jar
+
 
 
 #CMD ["/bin/bash", "-c cat $HOME/README.md"]
