@@ -1,0 +1,27 @@
+
+
+
+Welcome to JGroups !
+********************
+
+Please read the README.md file for detailed instructions on how to run
+the demos.
+
+The following demos can be run (run them in multiple containers):
+
+* chat [-name name]
+
+* lock [-name name]
+
+* count [-name name]
+
+* relay [-name name]
+
+
+
+Questions can be asked on the users or dev mailing lists:
+https://sourceforge.net/p/javagroups/mailman.
+
+Enjoy !
+
+Bela Ban

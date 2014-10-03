@@ -28,6 +28,7 @@ ENV PATH $PATH:$HOME/bin
 WORKDIR /opt/jgroups
 
 RUN mkdir $HOME/bin
+#RUN echo "hello from bela" >> /etc/motd
 
 
 # Exposes ports used by JGroups
@@ -35,6 +36,7 @@ RUN mkdir $HOME/bin
 
 
 COPY README.md  $HOME/
+COPY demos.txt  $HOME/
 COPY udp.xml    $HOME/
 COPY log4j2.xml $HOME/
 COPY probe.sh   $HOME/bin/
@@ -54,5 +56,8 @@ RUN curl -sS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/3.5
 
 #CMD ["/bin/bash", "-c cat $HOME/README.md"]
 # CMD /bin/bash -c "cat $HOME/README.md"
-CMD /bin/bash
+#CMD /bin/bash
+#CMD echo "To run the demos, please read README.md" && /bin/bash
+CMD cat demos.txt && /bin/bash
+
 

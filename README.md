@@ -71,6 +71,9 @@ Typing `help` into the shell shows a few commands:
     my locks: 
     : 
 
+So let's start 2 instances, A and B, and acquire lock "bela" on A:
+
+    
 
 
 
