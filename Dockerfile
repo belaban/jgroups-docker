@@ -10,7 +10,9 @@ MAINTAINER Bela Ban <belaban@yahoo.com>
 
 RUN yum -y install \
     java-1.8.0-openjdk-devel \
-    unzip
+    net-tools \
+    unzip \
+    which
 
 # Create a user and group used to launch processes
 # The user ID 1000 is the default for the first "regular" user on Fedora/RHEL,
