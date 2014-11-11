@@ -25,7 +25,7 @@ RUN echo root:root | chpasswd
 RUN echo jgroups:jgroups | chpasswd
 
 ENV HOME /opt/jgroups
-ENV JGROUPS_VERSION 3.5.1.Final
+ENV JGROUPS_VERSION 3.6.0.Final
 ENV JAVA_HOME /usr/lib/jvm/java
 ENV PATH $PATH:$HOME/bin
 
