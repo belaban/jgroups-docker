@@ -57,11 +57,11 @@ RUN chown -R jgroups.jgroups $HOME/*
 USER jgroups
 
 RUN cd $HOME/lib && curl -k -L -O \
-https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-core/2.0/log4j-core-2.0.jar && \
-curl -k -L -O https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-api/2.0/log4j-api-2.0.jar
+https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-core/2.7/log4j-core-2.7.jar && \
+curl -k -L -O https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-api/2.7/log4j-api-2.7.jar
 
 RUN chmod u+x $HOME/bin/*
-RUN cd lib && curl -ksS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/3.6.0.Final/jgroups-3.6.0.Final.jar
+RUN cd lib && curl -ksS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/4.0.0.Beta2/jgroups-4.0.0.Beta2.jar
 
 
 
