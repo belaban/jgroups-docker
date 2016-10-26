@@ -15,6 +15,7 @@ The following demos can be run (run them in multiple containers):
 
 * count [-name name]
 
+probe.sh can be used to inspect the running cluster nodes on the host.
 
 Questions can be asked on the users or dev mailing lists:
 https://sourceforge.net/p/javagroups/mailman.
