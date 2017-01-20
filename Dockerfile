@@ -61,7 +61,7 @@ https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-c
 curl -k -L -O https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-api/2.7/log4j-api-2.7.jar
 
 RUN chmod u+x $HOME/bin/*
-RUN cd lib && curl -ksS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/4.0.0.Beta2/jgroups-4.0.0.Beta2.jar
+RUN cd lib && curl -ksS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/4.0.0.CR1/jgroups-4.0.0.CR1.jar
 
 
 
