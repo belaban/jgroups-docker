@@ -1,0 +1,25 @@
+
+# Use latest Fedora image as the base, change to jboss:base once available
+FROM fedora:25
+
+MAINTAINER Bela Ban <belaban@yahoo.com>
+
+# Update base image
+## Disabled because yum update /clean fail: https://github.com/coreos/coreos-overlay/issues/474
+#RUN yum -y update && yum clean all
+
+
+RUN dnf -y install \
+    java-1.8.0-openjdk-devel \
+    net-tools \
+    nc        \
+    git       \
+    ant       \
+    unzip     \
+    which
+
+
+
+#CMD clear && cat demos.txt && /bin/bash
+
+

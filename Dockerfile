@@ -1,20 +1,9 @@
 
-# Use latest Fedora image as the base, change to jboss:base once available
-FROM fedora:20
+# Use belaban/base (contains fedora:25 and some packages)
+FROM belaban/base
 
 MAINTAINER Bela Ban <belaban@yahoo.com>
 
-# Update base image
-## Disabled because yum update /clean fail: https://github.com/coreos/coreos-overlay/issues/474
-#RUN yum -y update && yum clean all
-
-
-RUN yum -y install \
-    java-1.8.0-openjdk-devel \
-    net-tools \
-    nc \
-    unzip \
-    which
 
 # Create a user and group used to launch processes
 # The user ID 1000 is the default for the first "regular" user on Fedora/RHEL,
@@ -28,28 +17,30 @@ RUN echo jgroups:jgroups | chpasswd
 
 ENV HOME /opt/jgroups
 ENV JGROUPS_VERSION 4.0.0.CR2
+ENV JGROUPS $HOME/JGroups
 ENV JAVA_HOME /usr/lib/jvm/java
 ENV PATH $PATH:$HOME/bin
 
 WORKDIR /opt/jgroups
 
+
+## Download JGroups src code and build JAR
+RUN git clone https://github.com/belaban/JGroups.git
+RUN cd $JGROUPS && ant
+
 RUN mkdir $HOME/bin
-RUN mkdir $HOME/lib
-
-
-# Exposes ports used by JGroups
-## EXPOSE port1 port2 .. port-n
 
 
 COPY README.md  $HOME/
 COPY demos.txt  $HOME/
 COPY udp.xml    $HOME/
 COPY log4j2.xml $HOME/
-COPY probe.sh   $HOME/bin/
-COPY jgroups.sh $HOME/bin/
 COPY chat.sh    $HOME/bin/chat
 COPY lock.sh    $HOME/bin/lock
 COPY count.sh   $HOME/bin/count
+
+RUN ln -s /opt/jgroups/JGroups/bin/jgroups.sh /opt/jgroups/bin/jgroups.sh
+RUN ln -s /opt/jgroups/JGroups/bin/probe.sh /opt/jgroups/bin/probe.sh
 
 RUN chown -R jgroups.jgroups $HOME/*
 
@@ -57,19 +48,10 @@ RUN chown -R jgroups.jgroups $HOME/*
 # *not* by ADD or COPY !!
 USER jgroups
 
-RUN cd $HOME/lib && curl -k -L -O \
-https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-core/2.7/log4j-core-2.7.jar && \
-curl -k -L -O https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-api/2.7/log4j-api-2.7.jar
 
 RUN chmod u+x $HOME/bin/*
-RUN cd lib && curl -ksS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/4.0.0.CR2/jgroups-4.0.0.CR2.jar
 
 
-
-#CMD ["/bin/bash", "-c cat $HOME/README.md"]
-# CMD /bin/bash -c "cat $HOME/README.md"
-#CMD /bin/bash
-#CMD echo "To run the demos, please read README.md" && /bin/bash
 CMD clear && cat demos.txt && /bin/bash
 
 
