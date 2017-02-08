@@ -20,6 +20,7 @@ ENV JGROUPS_VERSION 4.0.0.CR2
 ENV JGROUPS $HOME/JGroups
 ENV JAVA_HOME /usr/lib/jvm/java
 ENV PATH $PATH:$HOME/bin
+ENV MY_NAME BelaBan
 
 WORKDIR /opt/jgroups
 
