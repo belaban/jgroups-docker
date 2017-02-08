@@ -11,6 +11,7 @@ MAINTAINER Bela Ban <belaban@yahoo.com>
 RUN yum -y install \
     java-1.8.0-openjdk-devel \
     net-tools \
+    nc \
     unzip \
     which
 
@@ -25,7 +26,7 @@ RUN echo root:root | chpasswd
 RUN echo jgroups:jgroups | chpasswd
 
 ENV HOME /opt/jgroups
-ENV JGROUPS_VERSION 4.0.0.Beta2
+ENV JGROUPS_VERSION 4.0.0.CR2
 ENV JAVA_HOME /usr/lib/jvm/java
 ENV PATH $PATH:$HOME/bin
 
@@ -61,7 +62,7 @@ https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-c
 curl -k -L -O https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-api/2.7/log4j-api-2.7.jar
 
 RUN chmod u+x $HOME/bin/*
-RUN cd lib && curl -ksS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/4.0.0.CR1/jgroups-4.0.0.CR1.jar
+RUN cd lib && curl -ksS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/$JGROUPS_VERSION/jgroups-$JGROUPS_VERSION.jar
 
 
 
