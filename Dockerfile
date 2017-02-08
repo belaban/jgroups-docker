@@ -8,6 +8,7 @@ MAINTAINER Bela Ban <belaban@yahoo.com>
 ## Disabled because yum update /clean fail: https://github.com/coreos/coreos-overlay/issues/474
 #RUN yum -y update && yum clean all
 
+
 RUN yum -y install \
     java-1.8.0-openjdk-devel \
     net-tools \
@@ -30,7 +31,6 @@ ENV JGROUPS_VERSION 4.0.0.CR2
 ENV JAVA_HOME /usr/lib/jvm/java
 ENV PATH $PATH:$HOME/bin
 
-# Set the HOME env variable
 WORKDIR /opt/jgroups
 
 RUN mkdir $HOME/bin
@@ -62,7 +62,7 @@ https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-c
 curl -k -L -O https://search.maven.org/remotecontent?filepath=org/apache/logging/log4j/log4j-api/2.7/log4j-api-2.7.jar
 
 RUN chmod u+x $HOME/bin/*
-RUN cd lib && curl -ksS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/$JGROUPS_VERSION/jgroups-$JGROUPS_VERSION.jar
+RUN cd lib && curl -ksS -L -O https://sourceforge.net/projects/javagroups/files/JGroups/4.0.0.CR2/jgroups-4.0.0.CR2.jar
 
 
 
