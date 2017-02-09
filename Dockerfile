@@ -20,14 +20,14 @@ ENV JGROUPS_VERSION 4.0.0.CR2
 ENV JGROUPS $HOME/JGroups
 ENV JAVA_HOME /usr/lib/jvm/java
 ENV PATH $PATH:$HOME/bin
-
+ENV IP_ADDR `curl http://169.254.169.254/latest/meta-data/local-ipv4`
 
 WORKDIR /opt/jgroups
 
 
 ## Download JGroups src code and build JAR
 RUN git clone https://github.com/belaban/JGroups.git
-RUN cd $JGROUPS && ant
+RUN cd $JGROUPS && ant jar ## compiles and places JAR in ./dist
 
 RUN mkdir $HOME/bin
 

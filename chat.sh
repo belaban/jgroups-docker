@@ -1,3 +1,5 @@
 #!/bin/bash
-jgroups.sh org.jgroups.demos.Chat -props $HOME/udp.xml $*
+
+
+jgroups.sh -DJGROUPS_EXTERNAL_ADDR=$IP_ADDR org.jgroups.demos.Chat -props $HOME/udp.xml $*
 

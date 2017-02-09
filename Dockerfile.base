@@ -19,6 +19,7 @@ RUN dnf -y install \
     unzip     \
     which
 
+setcap cap_net_raw,cap_net_admin+p /usr/bin/ping
 
 
 #CMD clear && cat demos.txt && /bin/bash
