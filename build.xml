@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 
-<project name="native-s3-ping" default="compile" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="jgroups-docker" default="compile" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
     <description>
         Ant/ivy based build.xml
     </description>
@@ -96,7 +96,7 @@
             depends="compile">
         <mkdir dir="${dist.dir}"/>
 
-        <jar destfile="${dist.dir}/native-s3-ping-${version}.jar"
+        <jar destfile="${dist.dir}/jgroups-docker-${version}.jar"
              basedir="${compile.dir}"
              includes="org/jgroups/aws/**">
             <fileset dir="${root.dir}">
@@ -108,7 +108,7 @@
 
     <target name="src.jar" description="Creates the source JAR (no demos, tests)">
          <mkdir dir="${dist.dir}"/>
-         <jar jarfile="${dist.dir}/native-s3-ping-${version}-sources.jar"
+         <jar jarfile="${dist.dir}/jgroups-docker-${version}-sources.jar"
               basedir="${src.dir}"
               includes="org/jgroups/aws/**">
          </jar>
