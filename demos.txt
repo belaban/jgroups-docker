@@ -9,11 +9,11 @@ the demos.
 
 The following demos can be run (run them in multiple containers):
 
-* chat [-name name]
+* chat.sh [-name name]
 
-* lock [-name name]
+* lock.sh [-name name]
 
-* count [-name name]
+* count.sh [-name name]
 
 probe.sh can be used to inspect the running cluster nodes on the host.
 

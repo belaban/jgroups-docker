@@ -16,29 +16,15 @@ RUN echo root:root | chpasswd
 RUN echo jgroups:jgroups | chpasswd
 
 ENV HOME /opt/jgroups
-ENV JGROUPS_VERSION 4.0.0.CR2
-ENV JGROUPS $HOME/JGroups
 ENV JAVA_HOME /usr/lib/jvm/java
-ENV PATH $PATH:$HOME/bin
+ENV PATH $PATH:$HOME/jgroups-docker/bin
 
 WORKDIR /opt/jgroups
 
 
 ## Download JGroups src code and build JAR
-RUN git clone https://github.com/belaban/JGroups.git
-RUN cd $JGROUPS && ant jar ## compiles and places JAR in ./dist
-
-RUN mkdir $HOME/bin
-
-
-COPY README.md demos.txt udp.xml aws.xml log4j2.xml $HOME/
-COPY set_ip.sh  $HOME/bin/
-COPY chat.sh    $HOME/bin/chat
-COPY lock.sh    $HOME/bin/lock
-COPY count.sh   $HOME/bin/count
-
-RUN ln -s /opt/jgroups/JGroups/bin/jgroups.sh /opt/jgroups/bin/jgroups.sh
-RUN ln -s /opt/jgroups/JGroups/bin/probe.sh /opt/jgroups/bin/probe.sh
+RUN git clone https://github.com/belaban/jgroups-docker.git
+RUN cd jgroups-docker && ant jar src.jar ## compiles and places JAR in ./dist
 
 RUN chown -R jgroups.jgroups $HOME/*
 
@@ -47,9 +33,9 @@ RUN chown -R jgroups.jgroups $HOME/*
 USER jgroups
 
 
-RUN chmod u+x $HOME/bin/*
+RUN chmod u+x $HOME/*
 
 
-CMD clear && cat demos.txt && /bin/bash
+CMD clear && cat $HOME/jgroups-docker/demos.txt && /bin/bash
 
 
