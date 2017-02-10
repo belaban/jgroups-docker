@@ -6,8 +6,9 @@
           revision="1.0.0-SNAPSHOT"/>
 
     <dependencies>
-        <dependency org="org.jgroups"   name="jgroups"          rev="4.0.+"/>
-        <dependency org="com.amazonaws" name="aws-java-sdk-s3"  rev="1.11.+"/>
+        <dependency org="org.jgroups"        name="jgroups"          rev="4.0.+"/>
+        <dependency org="com.amazonaws"      name="aws-java-sdk-s3"  rev="1.11.+"/>
+        <dependency org="org.jgroups.aws.s3" name="native-s3-ping"   rev="1.0.0-SNAPSHOT"/>
 
         <!--<exclude org="*" ext="*" type="source"/>-->
         <exclude org="*" ext="*" type="javadoc"/>
