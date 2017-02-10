@@ -2,15 +2,23 @@
 *.iws
 *.ipr
 *.iml
-.git
 .project
 .classpath
-.factorypath
 .settings/
 .idea/
+.idea
+.ant-targets-build.xml
 .DS_Store
 classes/
 build.properties
+dist/
+lib/
+atlassian*
+keystore/
 tmp/
-
+bla*.java
+doc/manual/target
+doc/tutorial/target
+conf/MANIFEST.MF
+target/
 

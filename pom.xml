@@ -1,0 +1,433 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.jgroups.aws.s3</groupId>
+    <artifactId>native-s3-ping</artifactId>
+    <packaging>bundle</packaging>
+    <name>native-s3-ping</name>
+    <version>1.0.0-SNAPSHOT</version>
+    <url>http://www.github.com/jgroups-extras/native-s3-ping</url>
+
+    <properties>
+        <jgroups.version>4.0.0.CR2</jgroups.version>
+        <aws.version>1.11.86</aws.version>
+        <!-- nexus-staging-maven-plugin -->
+        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+        <nexus.server.id>jboss-releases-repository</nexus.server.id>
+        <nexus.server.url>https://repository.jboss.org/nexus</nexus.server.url>
+        <nexus.snapshot.server.id>jboss-snapshots-repository</nexus.snapshot.server.id>
+        <nexus.snapshot.server.url>https://repository.jboss.org/nexus/content/repositories/snapshots/</nexus.snapshot.server.url>
+    </properties>
+
+    <description>
+        Discovery protocol for S3 based on Zalando's original implementation (see README for details)
+    </description>
+
+    <organization>
+        <name>JBoss, a division of Red Hat</name>
+        <url>http://www.jboss.org</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <name>Tobias Sarnowski</name>
+            <email>tobias.sarnowski@zalando.de</email>
+            <organization>Zalando SE</organization>
+            <organizationUrl>http://tech.zalando.com/</organizationUrl>
+        </developer>
+        <developer>
+            <name>Bela Ban</name>
+            <email>belaban@yahoo.com</email>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>Apache License 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/jgroups-extras/native-s3-ping.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/jgroups-extras/native-s3-ping.git</developerConnection>
+        <url>https://github.com/belaban/JGroups</url>
+    </scm>
+
+    <issueManagement>
+        <system>jira</system>
+        <url>https://github.com/jgroups-extras/native-s3-ping/issues</url>
+    </issueManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>${nexus.server.id}</id>
+            <name>JBoss Releases Repository</name>
+            <url>${nexus.server.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>${nexus.snapshot.server.id}</id>
+            <url>${nexus.snapshot.server.url}</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+
+    <repositories>
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:120</updatePolicy>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>jboss-releases-repository</id>
+            <name>JBoss Public Maven Repository Staging</name>
+            <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:120</updatePolicy>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>jboss-snapshots-repository</id>
+            <name>JBoss Nexus snapshots repository</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>interval:120</updatePolicy>
+            </snapshots>
+        </repository>
+
+
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.jgroups</groupId>
+            <artifactId>jgroups</artifactId>
+            <version>${jgroups.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>${aws.version}</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+        <resources>
+            <resource>
+               <directory>${project.basedir}</directory>
+               <includes>
+                  <include>LICENSE</include>
+                  <include>README</include>
+               </includes>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <!-- See configuration details at http://books.sonatype.com/nexus-book/reference/staging-deployment.html -->
+                    <nexusUrl>${nexus.server.url}</nexusUrl>
+                    <serverId>${nexus.server.id}</serverId>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <excludes>
+                        <exclude>org/jgroups/util/JUnitXMLReporter.java</exclude>
+                        <!--<exclude>org/jgroups/demos/**</exclude>-->
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>1.3.1</version>
+                <executions>
+                    <execution>
+                        <id>enforce-java</id>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <rules>
+                        <requireJavaVersion>
+                            <!-- require Java 8 or higher -->
+                            <version>[1.8,)</version>
+                        </requireJavaVersion>
+                        <requireMavenVersion>
+                            <version>3.0.4</version>
+                        </requireMavenVersion>
+                    </rules>
+                </configuration>
+            </plugin>
+           <plugin>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>build-helper-maven-plugin</artifactId>
+              <executions>
+                 <execution>
+                    <id>add-source</id>
+                    <phase>validate</phase>
+                    <goals>
+                       <goal>add-source</goal>
+                    </goals>
+                    <configuration>
+                       <sources>
+                          <!-- These tests have to go in the main jar -->
+                          <source>tests/other</source>
+                          <source>tests/perf</source>
+                       </sources>
+                    </configuration>
+                 </execution>
+                 <execution>
+                    <id>add-test-source</id>
+                    <phase>validate</phase>
+                    <goals>
+                       <goal>add-test-source</goal>
+                    </goals>
+                    <configuration>
+                       <sources>
+                          <source>tests/byteman</source>
+                          <source>tests/junit</source>
+                          <source>tests/junit-functional</source>
+                          <!-- tests/other and tests/perf are included in the normal sources -->
+                          <source>tests/stress</source>
+                       </sources>
+                    </configuration>
+                 </execution>
+              </executions>
+           </plugin>
+           <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <property name="compile_classpath" refid="maven.compile.classpath"/>
+                                <property name="plugin_classpath" refid="maven.plugin.classpath"/>
+                                <delete dir="${project.build.directory}/schema" failonerror="false"/>
+                                <mkdir dir="${project.build.directory}/schema"/>
+                                <java classname="org.jgroups.util.XMLSchemaGenerator">
+                                    <classpath>
+                                        <pathelement path="${compile_classpath}"/>
+                                        <pathelement path="${plugin_classpath}"/>
+                                    </classpath>
+                                    <arg line="-o ${project.build.directory}/schema"/>
+                                </java>
+                            </tasks>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Make sure we generate src jars too -->
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-source-plugin</artifactId>
+               <inherited>true</inherited>
+               <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifestFile>conf/manifest.mf</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Main-Class>org.jgroups.Version</Main-Class>
+                        <Implementation-Version>${project.version}</Implementation-Version>
+                        <DynamicImport-Package>*</DynamicImport-Package>
+                        <Export-Package>
+                            schema;version=${project.version},
+                            ${project.groupId}.*;version=${project.version}
+                        </Export-Package>
+                        <Bundle-RequiredExecutionEnvironment>JavaSE-1.7</Bundle-RequiredExecutionEnvironment>
+                    </instructions>
+                </configuration>
+            </plugin>
+
+            <!-- Disable default tests: they won't run since they are lacking configuration -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                    <skipTests>true</skipTests>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>test</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>3.0.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.7</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-clean-plugin</artifactId>
+                    <version>2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.0</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.12.4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>2.15</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.8</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-help-plugin</artifactId>
+                    <version>2.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+                <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+                <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>org.apache.maven.plugins</groupId>
+                                        <artifactId>maven-antrun-plugin</artifactId>
+                                        <versionRange>[1.3,)</versionRange>
+                                        <goals>
+                                            <goal>run</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore />
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

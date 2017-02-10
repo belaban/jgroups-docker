@@ -2,7 +2,7 @@
 # Use belaban/base (contains fedora:25 and some packages)
 FROM belaban/base
 
-MAINTAINER Bela Ban <belaban@yahoo.com>
+LABEL maintainer Bela Ban <belaban@yahoo.com>
 
 
 # Create a user and group used to launch processes
@@ -20,7 +20,6 @@ ENV JGROUPS_VERSION 4.0.0.CR2
 ENV JGROUPS $HOME/JGroups
 ENV JAVA_HOME /usr/lib/jvm/java
 ENV PATH $PATH:$HOME/bin
-ENV IP_ADDR `curl http://169.254.169.254/latest/meta-data/local-ipv4`
 
 WORKDIR /opt/jgroups
 
@@ -32,10 +31,8 @@ RUN cd $JGROUPS && ant jar ## compiles and places JAR in ./dist
 RUN mkdir $HOME/bin
 
 
-COPY README.md  $HOME/
-COPY demos.txt  $HOME/
-COPY udp.xml    $HOME/
-COPY log4j2.xml $HOME/
+COPY README.md demos.txt udp.xml aws.xml log4j2.xml $HOME/
+COPY set_ip.sh  $HOME/bin/
 COPY chat.sh    $HOME/bin/chat
 COPY lock.sh    $HOME/bin/lock
 COPY count.sh   $HOME/bin/count

@@ -2,12 +2,16 @@
 
 # jgroups-docker
 
-Dockerfile for a container containing JGroups and a couple of
-demos. 
+Dockerfile for a container containing JGroups and a couple of demos. 
 
 To run the image directly, execute
 
-      docker -it belaban/jgroups
+      docker run -p 7800:7800 -p 9000:9000 -it --rm --network=host belaban/jgroups
+
+      or
+
+      docker run -p 7800:7800 -p 9000:9000 -it --rm --network=bridge belaban/jgroups
+
 
 To build the image, run
 
@@ -21,7 +25,7 @@ container each *on the same host* and they will form a cluster.
 ## Chat
 To run it:
 
-      chat [-name name], e.g. chat -name A
+      chat [-props config] [-name name], e.g. chat -props ./udp.xml -name A
 
 Run the Chat application in multiple containers on the same host and
 they will form a cluster. Typing a message into one Chat will send it

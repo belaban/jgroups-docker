@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+    <info organisation="org.jgroups.aws.s3"
+          module="native-s3-ping"
+          revision="1.0.0-SNAPSHOT"/>
+
+    <dependencies>
+        <dependency org="org.jgroups"   name="jgroups"          rev="4.0.+"/>
+        <dependency org="com.amazonaws" name="aws-java-sdk-s3"  rev="1.11.+"/>
+
+        <!--<exclude org="*" ext="*" type="source"/>-->
+        <exclude org="*" ext="*" type="javadoc"/>
+    </dependencies>
+</ivy-module>

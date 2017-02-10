@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+
+
+<project name="native-s3-ping" default="compile" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
+    <description>
+        Ant/ivy based build.xml
+    </description>
+
+    <property name="version"          value="1.0.0"/>
+    <property name="root.dir"         value="${basedir}"/>
+    <property name="src.dir"          value="${root.dir}/src"/>
+    <property name="compile.dir"      value="${root.dir}/classes"/>
+    <property name="lib.dir"          value="${root.dir}/lib"/>
+    <property name="dist.dir"         value="${root.dir}/dist"/>
+    <property name="tmp.dir"          value="${root.dir}/tmp"/>
+    <property name="conf.dir"         value="${root.dir}/conf"/>
+    <property name="bin.dir"          value="${root.dir}/bin"/>
+    <property name="ivy.version"      value="2.4.0" />
+
+
+    <path id="jg.classpath">
+        <pathelement location="${compile.dir}"/>
+        <pathelement location="${conf.dir}"/>
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
+
+
+
+    <target name="check-lib-exists">
+        <available file="${lib.dir}" type="dir" property="lib.dir.exists"/>
+    </target>
+
+
+    <target name="check-ivy-exists">
+        <mkdir dir="${lib.dir}"/>
+        <pathconvert property="ivy.exists" pathsep=" " setonempty="false">
+            <path>
+                <fileset dir="${lib.dir}" includes="ivy*.jar" />
+            </path>
+        </pathconvert>
+    </target>
+
+    <target name="check-jars-exist">
+        <mkdir dir="${lib.dir}"/>
+        <pathconvert property="jars.exist" pathsep=" " setonempty="false">
+            <path>
+                <fileset dir="${lib.dir}" excludes="ivy*.jar" />
+            </path>
+        </pathconvert>
+    </target>
+
+
+    <target name="get-ivy" description="Fetches ivy from a maven repo" depends="check-ivy-exists" unless="ivy.exists">
+        <get src="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.version}/ivy-${ivy.version}.jar"
+             dest="${lib.dir}" usetimestamp="true"/>
+    </target>
+
+
+    <target name="retrieve" depends="check-jars-exist,get-ivy,define-ivy-task" unless="jars.exist"
+            description="Retrieves all dependent libs defined in ivy.xml unless already present">
+        <ivy:resolve file="ivy.xml"/>
+        <ivy:retrieve type="jar,bundle"  />
+    </target>
+
+
+    <target name="define-ivy-task">
+        <taskdef resource="org/apache/ivy/ant/antlib.xml"
+                 uri="antlib:org.apache.ivy.ant" classpathref="jg.classpath"/>
+    </target>
+
+    <target name="prepare" depends="retrieve">
+        <property environment="env"/>
+        <mkdir dir="${compile.dir}"/>
+    </target>
+
+
+    <target name="compile" depends="prepare" description="Compiles all Java files">
+        <javac destdir="${compile.dir}"
+               source="1.8"
+               target="1.8"
+               classpathref="jg.classpath"
+               includeantruntime="false"
+               debug="on"
+               deprecation="off"
+               optimize="off"
+               listfiles="false">
+            <src path="${src.dir}"/>
+        </javac>
+    </target>
+
+
+    <target name="jar"
+            description="Creates the JAR (includes everything)"
+            depends="compile">
+        <mkdir dir="${dist.dir}"/>
+
+        <jar destfile="${dist.dir}/native-s3-ping-${version}.jar"
+             basedir="${compile.dir}"
+             includes="org/jgroups/aws/**">
+            <fileset dir="${root.dir}">
+                <include name="LICENSE"/>
+                <include name="README.md"/>
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="src.jar" description="Creates the source JAR (no demos, tests)">
+         <mkdir dir="${dist.dir}"/>
+         <jar jarfile="${dist.dir}/native-s3-ping-${version}-sources.jar"
+              basedir="${src.dir}"
+              includes="org/jgroups/aws/**">
+         </jar>
+     </target>
+
+
+    <target name="clean"
+            description="Removes all class files and ./dist">
+        <delete dir="${compile.dir}" failonerror="false"/>
+        <delete dir="${dist.dir}" failonerror="false"/>
+        <delete dir="${tmp.dir}" failonerror="false"/>
+        <delete dir="${root.dir}/test-output" failonerror="false"/>
+        <delete dir="${root.dir}/target" failonerror="false"/>
+        <delete file="${root.dir}/velocity.log*" failonerror="false"/>
+        <delete file="${conf.dir}/MANIFEST.MF" failonerror="false"/>
+        <delete>
+            <fileset dir="${root.dir}" defaultexcludes="no">
+                <include name="**/*~"/>
+            </fileset>
+        </delete>
+    </target>
+
+    <target name="clean-all" depends="clean" description="Also removes lib">
+        <delete dir="${lib.dir}" failonerror="false"/>
+    </target>
+
+
+</project>
