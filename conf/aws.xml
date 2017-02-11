@@ -10,7 +10,7 @@
         xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
     <TCP
          external_addr="${JGROUPS_EXTERNAL_ADDR:match-interface:eth0}"
-	 bind_addr="site_local,match-interface:eth0"
+	     bind_addr="site_local,match-interface:eth0"
          bind_port="${TCP_PORT:7800}"
 
          recv_buf_size="200k"
@@ -31,7 +31,7 @@
       - "mybucket" needs to exist. If it doesn't exist, it will be created (the caller needs to have the correct permissions)
       - access_key and secret_access_key need to be set unless the bucket is readable and writable by everyone
       -->
-    <S3_PING
+    <NATIVE_S3_PING
         location="${S3_BUCKET_NAME:mybucket}"
      />
     

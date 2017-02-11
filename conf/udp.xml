@@ -11,6 +11,7 @@
         xmlns="urn:org:jgroups"
         xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
     <UDP
+         bind_addr="match-interface:eth0,match-interface:en0,site_local,loopback"
          mcast_port="${jgroups.udp.mcast_port:45588}"
          ip_ttl="8"
          tos="8"
