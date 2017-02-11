@@ -25,13 +25,17 @@ while [ $# -gt 0 ]
 do
     case $1 in
     -h|--help)
-        printf "\n$0 [-h] [-a] [-props <JGroups config file>] [-b <bucket name>]\n\
+        printf "\n$0 [-h] [-a] [-props <JGroups config file>] [-b <bucket name>] [-name <node name]]\n\
            (-a: run on AWS)\n\n"
         exit 1
         ;;
     -p|-props)
         props=$2
         shift
+        ;;
+    -n|-name)
+        name=$2;
+        shift;
         ;;
     -a)
         aws=true
@@ -68,6 +72,12 @@ if [[ -n ${aws} ]];
        FLAGS="$FLAGS -DJGROUPS_EXTERNAL_ADDR=$ext_addr"
 fi
 
+executable="java -DS3_BUCKET_NAME=$bucket -cp $CP $LOG $FLAGS $main -props $CONF/$props $*"
 
-java -DS3_BUCKET_NAME=$bucket -cp $CP $LOG $FLAGS $main -props $CONF/$props $*
+if [[ -n $name ]];
+    then
+        executable="$executable -name $name"
+fi
+
+eval $executable
 

@@ -9,11 +9,15 @@ the demos.
 
 The following demos can be run (run them in multiple containers):
 
-* chat.sh [-name name]
+* chat.sh [-name name] [-props JGroups config file] [-a] [-b bucket]
 
-* lock.sh [-name name]
+* lock.sh [-name name] [-props JGroups config file] [-a] [-b bucket]
 
-* count.sh [-name name]
+* count.sh [-name name] [-props JGroups config file] [-a] [-b bucket]
+
+-a: run on AWS (triggers a scrips to fetch the external address of the EC2 instance)
+-b: the S3 bucket name; used in aws.xml when fetching information about other cluster members
+    on startup
 
 probe.sh can be used to inspect the running cluster nodes on the host.
 
