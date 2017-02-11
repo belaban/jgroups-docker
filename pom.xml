@@ -11,7 +11,7 @@
     <properties>
         <jgroups.version>4.0.0.CR2</jgroups.version>
         <aws.version>1.11.86</aws.version>
-        <native-s3.version>0.9.0.Final</native-s3.version>
+        <native-s3.version>0.9.1.Final</native-s3.version>
         <!-- nexus-staging-maven-plugin -->
         <autoReleaseAfterClose>true</autoReleaseAfterClose>
         <nexus.server.id>jboss-releases-repository</nexus.server.id>
