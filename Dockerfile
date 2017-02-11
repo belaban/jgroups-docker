@@ -12,8 +12,7 @@ LABEL maintainer Bela Ban <belaban@yahoo.com>
 RUN groupadd -r jgroups -g 1000
 RUN useradd -u 1000 -r -g jgroups -m -d /opt/jgroups -s /sbin/nologin -c "jgroups user" jgroups
 
-RUN echo root:root | chpasswd 
-RUN echo jgroups:jgroups | chpasswd
+RUN echo root:root | chpasswd ; echo jgroups:jgroups | chpasswd
 
 ENV HOME /opt/jgroups
 ENV JAVA_HOME /usr/lib/jvm/java
