@@ -12,8 +12,9 @@ LABEL maintainer Bela Ban <belaban@yahoo.com>
 RUN mkdir -p /opt/jgroups
 RUN addgroup -S jgroups -g 1000
 RUN adduser -u 1000 -S -G jgroups -h /opt/jgroups -s /sbin/nologin jgroups
-
 RUN echo root:root | chpasswd ; echo jgroups:jgroups | chpasswd
+
+EXPOSE 7800-7900:7800-7900 9000-9100:9000-9100
 
 ENV HOME /opt/jgroups
 #ENV JAVA_HOME /usr/lib/jvm/java
