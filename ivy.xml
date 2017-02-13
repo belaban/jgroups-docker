@@ -8,7 +8,7 @@
     <dependencies>
         <dependency org="org.jgroups"        name="jgroups"          rev="4.0.+"/>
         <dependency org="com.amazonaws"      name="aws-java-sdk-s3"  rev="1.11.+"/>
-        <dependency org="org.jgroups.aws.s3" name="native-s3-ping"   rev="0.9.1.Final"/>
+        <dependency org="org.jgroups.aws.s3" name="native-s3-ping"   rev="0.9.2.Final"/>
 
         <!--<exclude org="*" ext="*" type="source"/>-->
         <exclude org="*" ext="*" type="javadoc"/>

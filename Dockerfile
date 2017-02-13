@@ -1,6 +1,6 @@
 
-# Use belaban/base (contains fedora:25 and some packages)
-FROM belaban/base
+# Use belaban/base (contains minimal alpine/openjdk and some packages)
+FROM belaban/alpine
 
 LABEL maintainer Bela Ban <belaban@yahoo.com>
 
@@ -9,13 +9,14 @@ LABEL maintainer Bela Ban <belaban@yahoo.com>
 # The user ID 1000 is the default for the first "regular" user on Fedora/RHEL,
 # so there is a high chance that this ID will be equal to the current user
 # making it easier to use volumes (no permission issues)
-RUN groupadd -r jgroups -g 1000
-RUN useradd -u 1000 -r -g jgroups -m -d /opt/jgroups -s /sbin/nologin -c "jgroups user" jgroups
+RUN mkdir -p /opt/jgroups
+RUN addgroup -S jgroups -g 1000
+RUN adduser -u 1000 -S -G jgroups -h /opt/jgroups -s /sbin/nologin jgroups
 
 RUN echo root:root | chpasswd ; echo jgroups:jgroups | chpasswd
 
 ENV HOME /opt/jgroups
-ENV JAVA_HOME /usr/lib/jvm/java
+#ENV JAVA_HOME /usr/lib/jvm/java
 ENV PATH $PATH:$HOME/jgroups-docker/bin
 
 WORKDIR /opt/jgroups

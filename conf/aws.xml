@@ -31,8 +31,8 @@
       - "mybucket" needs to exist. If it doesn't exist, it will be created (the caller needs to have the correct permissions)
       - access_key and secret_access_key need to be set unless the bucket is readable and writable by everyone
       -->
-    <NATIVE_S3_PING
-        location="${S3_BUCKET_NAME:mybucket}"
+    <org.jgroups.aws.s3.NATIVE_S3_PING
+        bucket_name="${S3_BUCKET_NAME:mybucket}"
      />
     
 
