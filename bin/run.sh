@@ -78,5 +78,5 @@ if [[ $name ]];
         executable="$executable -name $name"
 fi
 
-echo $executable
+eval $executable
 
