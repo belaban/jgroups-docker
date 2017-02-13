@@ -25,7 +25,7 @@ while [ $# -gt 0 ]
 do
     case $1 in
     -h|--help)
-        printf "\n$0 [-h] [-a] [-props <JGroups config file>] [-b <bucket name>] [-name <node name]]\n\
+        printf "\n$0 [-h] [-a] [-props JGroups config file] [-b S3 bucket name] [-r S3 region] [-name node name]\n\
            (-a: run on AWS)\n\n"
         exit 1
         ;;
@@ -44,6 +44,10 @@ do
         bucket=$2
         shift
         ;;
+    -r)
+        region=$2;
+        shift;
+        ;;
     (-*)
          echo "$0: error - unrecognized option $1" 1>&2;
          exit 1
@@ -58,17 +62,21 @@ done
 if [[ $aws ]];
    then
        ext_addr=`curl http://169.254.169.254/latest/meta-data/local-ipv4`;
-       #ext_addr="1.2.3.4"
        printf "Running on AWS: external address is %s\n" $ext_addr
        FLAGS="$FLAGS -DJGROUPS_EXTERNAL_ADDR=$ext_addr"
 fi
 
-executable="java -DS3_BUCKET_NAME=$bucket -cp $CP $LOG $FLAGS $main -props $CONF/$props"
+if [[ $region ]];
+    then
+        export REGION="-DS3_REGION=$region"
+fi
+
+executable="java $REGION -DS3_BUCKET=$bucket -cp $CP $LOG $FLAGS $main -props $CONF/$props"
 
 if [[ $name ]];
     then
         executable="$executable -name $name"
 fi
 
-eval $executable
+echo $executable
 

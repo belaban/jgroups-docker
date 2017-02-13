@@ -32,7 +32,8 @@
       - access_key and secret_access_key need to be set unless the bucket is readable and writable by everyone
       -->
     <org.jgroups.aws.s3.NATIVE_S3_PING
-        bucket_name="${S3_BUCKET_NAME:mybucket}"
+        region_name="${S3_REGION:us-east-1}"
+        bucket_name="${S3_BUCKET:mybucket}"
      />
     
 
