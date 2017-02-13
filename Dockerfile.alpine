@@ -9,9 +9,12 @@ RUN apk update && apk upgrade && apk add --no-cache  \
     bash      \
     curl      \
     git       \
+    iptables  \
     iputils   \
     netcat-openbsd  \
     net-tools \
+    sudo      \
+    tcpdump   \
     unzip     \
     which
 
