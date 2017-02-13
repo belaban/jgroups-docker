@@ -1,0 +1,19 @@
+
+# Use latest openjdk-lpine image as the base (small footprint)
+FROM openjdk:8-jdk-alpine
+
+LABEL maintainer Bela Ban <belaban@yahoo.com>
+
+RUN apk update && apk upgrade && apk add --no-cache  \
+    apache-ant       \
+    bash      \
+    curl      \
+    git       \
+    iputils   \
+    netcat-openbsd  \
+    net-tools \
+    unzip     \
+    which
+
+
+
