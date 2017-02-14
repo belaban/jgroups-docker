@@ -12,6 +12,7 @@
 :toc:
 :status:
 
+
 == Overview
 This document describes how to use JGroups in Docker containers to form clusters locally,
 on Amazon Web Services (AWS) and in the Google cloud (Google Compute Platform, GCP).
@@ -19,7 +20,7 @@ on Amazon Web Services (AWS) and in the Google cloud (Google Compute Platform, G
 The advantage of running Docker images in the cloud, rather than cloud-specific images is that the Docker
 images are the same across different clouds, whereas cloud images are always specific to a given cloud.
 
-The predefined docker image we'll use is https://hub.docker.com/r/belaban/jgroups]. It contains a number
+The predefined docker image we'll use is https://hub.docker.com/r/belaban/jgroups. It contains a number
 of interactive <<demos>>, ie. demos which require a TTY.
 
 The difference between running locally, or running in a cloud lies in the JGroups configuration and the Docker
@@ -33,10 +34,82 @@ Docker supports `none`, `bridge` and `host` networks out of the box (https://doc
 Which type of network is used is defined by the `--network` option, e.g. `--network=host`.
 
 Network `none` has no communication to the outside world and is used purely for Docker containers running on the same
-box.
+box. The bind address used is usually `127.0.0.1` (loopback) here.
 
-Network `bridge` is the default and can be used for containers to talk to each other. This is done via a `bridge0` or
-`docker0` virtual network interface installed by Docker on the host.
+Network `bridge` is the default and creates a virtual interface in the container that's not available on the host. To
+be able to communicate with other Docker containers on other hosts, the host's IP address has to be used (e.g. using
+`external_addr=<host's address>`, or by switching to `--network=host` (see below).
+
+For instance, starting an AWS EC2 instance, `ifconfig` executed on the host shows the following interfaces:
+
+```
+[ec2-user@ip-172-31-14-130 ~]$ ifconfig
+docker0   Link encap:Ethernet  HWaddr 02:42:33:C7:8E:F1
+          inet addr:172.17.0.1  Bcast:0.0.0.0  Mask:255.255.0.0
+          inet6 addr: fe80::42:33ff:fec7:8ef1/64 Scope:Link
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:22 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:20 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1342 (1.3 KiB)  TX bytes:1492 (1.4 KiB)
+
+eth0      Link encap:Ethernet  HWaddr 0E:C8:A1:0F:39:E6
+          inet addr:172.31.14.130  Bcast:172.31.15.255  Mask:255.255.240.0
+          inet6 addr: fe80::cc8:a1ff:fe0f:39e6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:9001  Metric:1
+          RX packets:105050 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:37021 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:117948327 (112.4 MiB)  TX bytes:6929186 (6.6 MiB)
+...
+```
+
+The `docker0` interface is created by Docker to implement the bridged network. This is the interface that will be used
+by the Docker container. Note that `eth0` is the host's interface, with a routable `172.31.14.130` IP address.
+
+When starting a container with bridged networking (default):
+
+`docker run -it -p 7800:7800 --rm belaban/jgroups`, `ifconfig` executed in the container shows:
+
+```
+bash-4.3$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 02:42:AC:11:00:02
+          inet addr:172.17.0.2  Bcast:0.0.0.0  Mask:255.255.0.0
+          inet6 addr: fe80::42:acff:fe11:2%32571/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:6 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:3 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:508 (508.0 B)  TX bytes:258 (258.0 B)
+...
+```
+
+The `172.17.0.2` address is assigned by Docker from the `docker0` interface.
+
+The issue with these Docker-private addresses is that they cannot be used to talk between AWS instances, as they are not
+routed. For instances to talk to each other, the host's `eth0` has to be used (from the `172.31.0.0` subnet).
+
+To do this, JGroups has an attribute `external_addr` in the transport. In a configuration, the following transport
+snippet would enable JGroups applications in network-bridged Docker containers to communicate:
+
+[source,xml]
+----
+<TCP external_addr="${ext-addr:172.31.14.130}"
+     bind_addr="match-interface:eth0"
+  ...
+ />
+----
+
+This means that JGroups will bind to `eth0` (`172.17.0.2`), but advertize its address as `172.31.14.130`, so
+other instances can talk to the instance.
+
+How to find out the hosts address is implementation-dependent;
+in AWS `curl http://169.254.169.254/latest/meta-data/local-ipv4` returns the IP address of the EC2 instance.
+
+An alternative is to grab the IP address before starting the Docker container and pass it to the container as an
+environment variable (e.g. `-e EXT-ADDR=1.2.3.4`). The container's entrypoint could then start JGroups by passing
+system property `-Dext-addr=1.2.3.4` which will set `external_addr` in TCP.
+
 
 
 ** Local
@@ -47,7 +120,7 @@ Network `bridge` is the default and can be used for containers to talk to each o
 *** external_addr (bridged network)
 ** Other discovery mechanisms
 *** Route 53
-*** Elstic IP addresses
+*** Elastic IP addresses
 *** GossipRouter
 *** Block of addresses in VPC
 ** IAM security roles (S3 access)
