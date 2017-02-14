@@ -164,7 +164,7 @@ some cases, this may not be available, when automatically launching containers v
 The JGroups demos can be run as multiple containers forming a cluster on the same local box (in bridged or host network
 mode), or across boxes in the local network (in host network).
 
-To run containers local, the configuration used by JGroups uses IP multicasting,
+To run containers locally, the configuration used by JGroups uses IP multicasting,
 as shown in `./conf/udp.xml` (abridged):
 
 [source,xml]
@@ -194,31 +194,70 @@ This configuration uses IP multicasting (`UDP` as transport) and multicast disco
 It binds to `eth0` if found, if not tries to bind to `en0` (Macs), then tries to find a site local IP address, and
 falls back to lookback (`127.0.0.1`) if all preceding addresses didn't match.
 
+Run multiple container as follows:
+
+  docker run -it --rm --network=host belaban/jgroups
+
+In the container, there's a readme which describes how to run the demos, e.g. Chat. Also see <<Demos>> below for details
+on the demos. To run the Chat demo, run
+
+  # udp.xml is the default so -props can be omitted
+  chat.sh -props udp.xml -name A
+
+This should create a cluster of Chat nodes, even across hosts due to `--network=host`.
+
+If IP multicasting is not supported, one can always fall back to TCP, but this means copying `tcp.xml` (for example)
+from the JGroups distribution into the Docker container and modifying it (e.g. change the discovery protocol). The
+JGroups manual at http://www.jgroups.org/manual4/index.html shows how to do this.
+
 
 == Amazon Web Services (AWS)
 
-This section shows how to run Docker containers with the JGroups demo on AWS.
+This section shows how to run Docker containers with the JGroups demo on AWS. Contrary to running locally, we have
+to use a security policy to define which traffic (TCP/UDP/ICMP) to send/receive on which ports.
 
-Amazon ECS image
+Since IP multicasting is not supported, we also have to switch to TCP as transport and also change the discovery
+protocol (see <<AWS_Discovery>> below).
+
+Finally, if we use S3 for discovery, this requires an IAM role assigned to the container that permits creation,
+deletion, reading and writing of S3 buckets. These topics are discussed below.
+
+The Amazon image used for running the demo contains a bare bones Linux plus the Docker software: `ami-92659c84`.
+Search for `amazon-ecs-optimized` to find it. Of course, any other AMI that contains Docker can be used.
+
+First, an EC2 instance is created with this AMI, then we need to ssh into it and start the Docker container.
+
 
 === Security policy
+The security policy used for the demo permits all traffic from any protocol on any port and from/to any address. This
+is fine for a demo, but of course not recommended for production.
+
+Alternatively, using _no_ security group is the same as above.
+
+The selected security policy needs to be associated with the EC2 instance when it is started.
+
 
 === IAM security role to access S3
+If S3 (e.g. `S3_PING` or `NATIVE_S3_PING`) is used for discovery in the JGroups configuration, then the EC2 instance
+needs to be started with a role that permits access to S3 buckets, specifically creation of buckets, reading objects
+from buckets and writing objects to buckets (deletion is currently not used).
 
+The role that I used for the demo was `AmazonS3FullAccess` which (as its name suggests) has all permissions regarding
+S3 buckets.
+
+
+[[AWS_Discovery]]
 === Discovery
 
 
 
 
 ** S3 buckets for discovery
-*** external_addr (bridged network)
 ** Other discovery mechanisms
 *** Route 53
 *** Elastic IP addresses
 *** GossipRouter
 *** Block of addresses in VPC
-** IAM security roles (S3 access)
-** Security policies (inbound and outbound traffic, open ports)
 * Publish ports
 
 == Google Compute Platform (GCP)
