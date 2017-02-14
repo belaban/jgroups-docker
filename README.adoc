@@ -249,16 +249,92 @@ S3 buckets.
 [[AWS_Discovery]]
 === Discovery
 
+The task of discovery is for a new cluster node to find the coordinator of the cluster to join, and send it a join
+request. Whereas `PING` sends a multicast and everyone responds with the coordinator's address and information about
+themselves, this cannot be done in a cloud where IP multicasting usually isn't supported.
+
+Therefore, we have to resort to other ways of running discovery. They're discussed in the following sections.
+
+==== NATIVE_S3_PING
+
+NATIVE_S3_PING is a separate protocol developed at https://github.com/jgroups-extras/native-s3-ping. It uses the
+Amazon S3 Java SDK to access buckets in S3 which store information about cluster members.
+
+The advantage over link:http://www.jgroups.org/manual4/index.html#_s3_ping[S3_PING] is that no credentials
+(`AWS_ACCESS_KEY`, `AWS_SECRET_ACCESS_KEY`) needs to be passed to the EC2 instance on startup, but rather the
+credentials of the user which started the EC2 instance are used.
+
+There's a configuration `./conf/aws.xml` which has this protocol in it:
+
+[source,xml]
+----
+<config>
+    <TCP
+         external_addr="${JGROUPS_EXTERNAL_ADDR:match-interface:eth0}"
+	     bind_addr="site_local,match-interface:eth0"
+         bind_port="${TCP_PORT:7800}"
+    />
+    <!--
+      Uses an S3 bucket to discover members in the cluster.
+      - If "mybucket" doesn't exist, it will be created (requires permissions)
+    -->
+    <org.jgroups.aws.s3.NATIVE_S3_PING
+        region_name="${S3_REGION:us-east-1}"
+        bucket_name="${S3_BUCKET:mybucket}"
+     />
+    <MERGE3 max_interval="30000" min_interval="10000"/>
+    <FD_SOCK external_addr="${JGROUPS_EXTERNAL_ADDR}"
+             start_port="${FD_SOCK_PORT:9000}"/>
+    <FD_ALL timeout="10000" interval="3000"/>
+    <pbcast.NAKACK2/>
+    <UNICAST3/>
+    <pbcast.STABLE desired_avg_gossip="50000"
+                   max_bytes="8m"/>
+    <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                view_bundling="true"/>
+    <UFC max_credits="2M" min_threshold="0.4"/>
+    <MFC max_credits="2M" min_threshold="0.4"/>
+    <FRAG2 frag_size="60K"  />
+</config>
+----
+
+Attributes `bind_addr` and `external_addr` were discussed above. Note that the latter is not required if the Docker
+container is started with `--network=host`.
+
+The attributes used by `NATIVE_S3_PING` are `region_name` and `bucket_name`. The latter defines the bucket that will
+be used to store information about the members of this cluster. All objects created in this bucket are prefixed by
+the cluster name ("draw" in the example), e.g. `mybucket/draw-126532-A.list`. The former defines the region in which
+the bucket is located.
+
+NOTE: If a bucket doesn't exist, a new one will be created. Since bucket names have a global name space, a bucket that
+already exists for a different user will throw an exception. It is therefore recommended to create a bucket up-front
+and use it as `bucket_name`.
+
+Both region and bucket can be overridden by passing system properties `S3_REGION` and `S3_BUCKET_NAME` to the JGroups
+demo. Similar to passing `ext-addr` (see above), the docker container could be started with two environment variables
+for region and bucket name and they could then be read from the environment by a script that passes them as env vars
+to the demo.
+
+
+==== S3_PING
+`S3_PING` is discussed in the JGroups manual at http://www.jgroups.org/manual4/index.html#_s3_ping.
+
+==== TCPGOSSIP and GossipRouter
+
+==== TCPPING
+
+==== Route 53
+
+==== Elastic IP addresses
+
+==== Block of addresses in VPC
+
+
+=== Publishing ports used by JGroups
 
 
 
-** S3 buckets for discovery
-** Other discovery mechanisms
-*** Route 53
-*** Elastic IP addresses
-*** GossipRouter
-*** Block of addresses in VPC
-* Publish ports
+
 
 == Google Compute Platform (GCP)
 
