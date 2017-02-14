@@ -1,8 +1,64 @@
 
 
-= jgroups-docker adoc
+= JGroups and Docker
+:author: Bela Ban belaban@yahoo.com
+#:backend: deckjs
+#:deckjs_transition: fade
+:navigation:
+:deckjs_theme: web-2.0
+:deckjs_transition: fade
+:goto:
+:menu:
+:toc:
+:status:
 
-Dockerfile for a container containing JGroups and a couple of demos. 
+== Overview
+This document describes how to use JGroups in Docker containers to form clusters locally,
+on Amazon Web Services (AWS) and in the Google cloud (Google Compute Platform, GCP).
+
+The advantage of running Docker images in the cloud, rather than cloud-specific images is that the Docker
+images are the same across different clouds, whereas cloud images are always specific to a given cloud.
+
+The predefined docker image we'll use is https://hub.docker.com/r/belaban/jgroups]. It contains a number
+of interactive <<demos>>, ie. demos which require a TTY.
+
+The difference between running locally, or running in a cloud lies in the JGroups configuration and the Docker
+startup options. Clouds generally do not support IP multicasting, so JGroups applications have to resort to
+TCP rather than UDP as transport. Plus, PING cannot be used and has to be replaced with different discovery protocols,
+e.g. S3_PING or GOOGLE_PING.
+
+=== Bridged versus host network
+
+Docker supports `none`, `bridge` and `host` networks out of the box (https://docs.docker.com/engine/userguide/networking).
+Which type of network is used is defined by the `--network` option, e.g. `--network=host`.
+
+Network `none` has no communication to the outside world and is used purely for Docker containers running on the same
+box.
+
+Network `bridge` is the default and can be used for containers to talk to each other. This is done via a `bridge0` or
+`docker0` virtual network interface installed by Docker on the host.
+
+
+** Local
+** Network: bridged, host
+
+== Amazon Web Services (AWS)
+** S3 buckets for discovery
+*** external_addr (bridged network)
+** Other discovery mechanisms
+*** Route 53
+*** Elstic IP addresses
+*** GossipRouter
+*** Block of addresses in VPC
+** IAM security roles (S3 access)
+** Security policies (inbound and outbound traffic, open ports)
+* Publish ports
+
+== Google Compute Platform (GCP)
+
+
+[[demos]]
+== Demos
 
 To run the image directly, execute
 
@@ -22,7 +78,7 @@ The demos are described below. The idea is to run the demo apps in a
 container each *on the same host* and they will form a cluster.
 
 
-## Chat
+=== Chat
 To run it:
 
       chat [-props config] [-name name], e.g. chat -props ./udp.xml -name A
@@ -32,7 +88,7 @@ they will form a cluster. Typing a message into one Chat will send it
 to all other chats
 
 
-## Distributed locks
+=== Distributed locks
 
 Distributed locks are implementations of
 `java.util.concurrent.locks.Lock` and provide locks that can be
@@ -86,7 +142,7 @@ Or a lock holder can be killed:
 
 
 
-## Distributed counters
+=== Distributed counters
 
 Distributed counters are counters will can be atomically incremented,
 decremented, compare-and-set etc *across a cluster*.
