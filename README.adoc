@@ -28,7 +28,7 @@ startup options. Clouds generally do not support IP multicasting, so JGroups app
 TCP rather than UDP as transport. Plus, PING cannot be used and has to be replaced with different discovery protocols,
 e.g. S3_PING or GOOGLE_PING.
 
-=== Bridged versus host network
+=== Bridged and host network
 
 Docker supports `none`, `bridge` and `host` networks out of the box (https://docs.docker.com/engine/userguide/networking).
 Which type of network is used is defined by the `--network` option, e.g. `--network=host`.
@@ -36,8 +36,10 @@ Which type of network is used is defined by the `--network` option, e.g. `--netw
 Network `none` has no communication to the outside world and is used purely for Docker containers running on the same
 box. The bind address used is usually `127.0.0.1` (loopback) here.
 
+
+=== Bridge network
 Network `bridge` is the default and creates a virtual interface in the container that's not available on the host. To
-be able to communicate with other Docker containers on other hosts, the host's IP address has to be used (e.g. using
+be able to communicate with other Docker containers on other hosts, the _host's_ IP address has to be used (e.g. using
 `external_addr=<host's address>`, or by switching to `--network=host` (see below).
 
 For instance, starting an AWS EC2 instance, `ifconfig` executed on the host shows the following interfaces:
@@ -110,12 +112,104 @@ An alternative is to grab the IP address before starting the Docker container an
 environment variable (e.g. `-e EXT-ADDR=1.2.3.4`). The container's entrypoint could then start JGroups by passing
 system property `-Dext-addr=1.2.3.4` which will set `external_addr` in TCP.
 
+==== Host network
+The `host` network is started as follows:
+
+`docker run --network=host -it -p 7800:7800 --rm belaban/jgroups`.
+
+This means that the started container has access to the same interfaces as present on the host. This can be confirmed
+by executing `ifconfig` inside the container:
+
+```
+bash-4.3$ ifconfig
+docker0   Link encap:Ethernet  HWaddr 02:42:33:C7:8E:F1
+          inet addr:172.17.0.1  Bcast:0.0.0.0  Mask:255.255.0.0
+          inet6 addr: fe80::42:33ff:fec7:8ef1%32692/64 Scope:Link
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:30 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:20 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:1878 (1.8 KiB)  TX bytes:1492 (1.4 KiB)
+
+eth0      Link encap:Ethernet  HWaddr 0E:C8:A1:0F:39:E6
+          inet addr:172.31.14.130  Bcast:172.31.15.255  Mask:255.255.240.0
+          inet6 addr: fe80::cc8:a1ff:fe0f:39e6%32692/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:9001  Metric:1
+          RX packets:192724 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:128453 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000
+          RX bytes:138976219 (132.5 MiB)  TX bytes:27369702 (26.1 MiB)
+...
+```
+
+As can be seen, the interfaces are the same as the host's interfaces. This means that the JGroups configuration doesn't
+require an `external_addr` attribute and can simply define `bind_addr`:
+[source,xml]
+----
+<TCP
+     bind_addr="match-interface:eth0"
+  ...
+ />
+----
+
+This will bind the transport's sockets to `172.31.14.130`.
 
 
-** Local
-** Network: bridged, host
+==== Bridged versus host networking
+It is simpler to use host networks as they don't require NATing between addresses (no `external_addr`). However, in
+some cases, this may not be available, when automatically launching containers via AWS Beanstalk.
+
+
+== Running containers locally
+The JGroups demos can be run as multiple containers forming a cluster on the same local box (in bridged or host network
+mode), or across boxes in the local network (in host network).
+
+To run containers local, the configuration used by JGroups uses IP multicasting,
+as shown in `./conf/udp.xml` (abridged):
+
+[source,xml]
+----
+<config>
+    <UDP
+       bind_addr="match-interface:eth0,match-interface:en0,site_local,loopback"
+    />
+
+    <PING />
+    <MERGE3 max_interval="30000" min_interval="10000"/>
+    <FD_SOCK/>
+    <FD_ALL timeout="10000" interval="3000"/>
+    <pbcast.NAKACK2/>
+    <UNICAST3 />
+    <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="8m"/>
+    <pbcast.GMS print_local_addr="true" join_timeout="3000"
+                view_bundling="true"/>
+    <UFC max_credits="2M" min_threshold="0.4"/>
+    <MFC max_credits="2M" min_threshold="0.4"/>
+    <FRAG2 frag_size="60K"  />
+</config>
+----
+
+This configuration uses IP multicasting (`UDP` as transport) and multicast discovery (`PING` as discovery protocol).
+It binds to `eth0` if found, if not tries to bind to `en0` (Macs), then tries to find a site local IP address, and
+falls back to lookback (`127.0.0.1`) if all preceding addresses didn't match.
+
 
 == Amazon Web Services (AWS)
+
+This section shows how to run Docker containers with the JGroups demo on AWS.
+
+Amazon ECS image
+
+=== Security policy
+
+=== IAM security role to access S3
+
+=== Discovery
+
+
+
+
 ** S3 buckets for discovery
 *** external_addr (bridged network)
 ** Other discovery mechanisms
