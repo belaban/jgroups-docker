@@ -400,11 +400,11 @@ demos. To for example run Chat, the following command has to be executed:
 
 To run the image directly, execute
 
-      docker run -p 7800:7800 -p 9000:9000 -it --rm --network=host belaban/jgroups
+      docker run -it --rm --network=host belaban/jgroups
 
-      or
+or
 
-      docker run -p 7800:7800 -p 9000:9000 -it --rm --network=bridge belaban/jgroups
+      docker run -p 7800:7800 -p 9000:9000 -it --rm belaban/jgroups
 
 
 To build the image, run
@@ -419,25 +419,21 @@ container each *on the same host* and they will form a cluster.
 === Chat
 To run it:
 
-      chat [-props config] [-name name], e.g. chat -props ./udp.xml -name A
+      chat [-props config] [-name name] [-b bucketname], e.g. chat -props ./udp.xml -name A
 
-Run the Chat application in multiple containers on the same host and
-they will form a cluster. Typing a message into one Chat will send it
-to all other chats
+Run the Chat application in multiple containers on the same host and they will form a cluster.
+Typing a message into one Chat will send it to all other chats
 
 
 === Distributed locks
 
-Distributed locks are implementations of
-`java.util.concurrent.locks.Lock` and provide locks that can be
+Distributed locks are implementations of `java.util.concurrent.locks.Lock` and provide locks that can be
 accessed from all nodes in a cluster. 
 
-A typical use case is to lock a resource so that only 1 thread in a
-given node in the cluster can access it. Should a node crash while
-holding a lock, the lock is released immediately.
+A typical use case is to lock a resource so that only 1 thread in a given node in the cluster can access it.
+Should a node crash while holding a lock, the lock is released immediately.
 
-For more details, see the section on distributed locks at
-http://www.jgroups.org/manual/index.html#LockService.
+For more details, see the section on distributed locks at http://www.jgroups.org/manual/index.html#LockService.
 
 To run the lock demo, type:
 
