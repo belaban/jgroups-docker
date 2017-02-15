@@ -255,6 +255,7 @@ themselves, this cannot be done in a cloud where IP multicasting usually isn't s
 
 Therefore, we have to resort to other ways of running discovery. They're discussed in the following sections.
 
+[[NATIVE_S3_PING]]
 ==== NATIVE_S3_PING
 
 NATIVE_S3_PING is a separate protocol developed at https://github.com/jgroups-extras/native-s3-ping. It uses the
@@ -264,7 +265,7 @@ The advantage over link:http://www.jgroups.org/manual4/index.html#_s3_ping[S3_PI
 (`AWS_ACCESS_KEY`, `AWS_SECRET_ACCESS_KEY`) needs to be passed to the EC2 instance on startup, but rather the
 credentials of the user which started the EC2 instance are used.
 
-There's a configuration `./conf/aws.xml` which has this protocol in it:
+There's a configuration `./conf/aws.xml` which includes this protocol:
 
 [source,xml]
 ----
@@ -320,18 +321,73 @@ to the demo.
 `S3_PING` is discussed in the JGroups manual at http://www.jgroups.org/manual4/index.html#_s3_ping.
 
 ==== TCPGOSSIP and GossipRouter
+link:http://www.jgroups.org/manual4/index.html#TCPGOSSIP_Prot[TCPGOSSIP] is a discovery protocol which stores
+information about cluster nodes in one or more `GossipRouters`, which are separate processes acting as lookup services.
+The configuration of `TCPGOSSIP` needs to include the addresses of the GossipRouters, e.g.:
+
+[source,xml]
+----
+<TCP .../>
+<TCPGOSSIP
+    initial_hosts="GR1[12001],GR2[12001]"
+ />
+----
+
+This means that there are GossipRouters running on `GR1` and `GR2` at port `12001`, and `TCPGOSSIP` will register
+each member with both processes.
+
+The GossipRouter processes can be started inside Docker container, too, e.g. using the image available at
+https://hub.docker.com/r/jboss/jgroups-gossip.
+
 
 ==== TCPPING
+link:http://www.jgroups.org/manual4/index.html#TCPPING_Prot[TCPPING] lists all cluster nodes in a static list, e.g.
 
-==== Route 53
+[source,xml]
+----
+<TCP bind_port="7800" .../>
+<TCPGOSSIP
+    initial_hosts="HostA[7800],HostB[7800],HostC[7800],..."
+ />
+----
 
-==== Elastic IP addresses
+The problem here is that the IP addresses of `HostA`, `HostB`, etc have to be known before starting any of the EC2
+instances. This requires either fixed addresses, or addresses mapped to a DNS service, e.g. Amazon Route 53.
 
-==== Block of addresses in VPC
+An alternative is to use AWS Elastic IP addresses, where the address of each cluster node is fixed and all of the
+potential members of the cluster are known ahead of starting the cluster.
+
+Another alternative is to create a Virtual Private Network (VPC), e.g. `172.45.0.0` and assign addresses from
+block `172.45.0.1` - `172.45.0.100`. This means that `TCPPING.initial_hosts` needs to have all 100 members of this
+block listed.
 
 
-=== Publishing ports used by JGroups
+=== Running the Docker containers on EC2
+After spinning up an EC2 instance, we're now ready to run the Docker container with image `belaban/jgroups`.
 
+The JGroups configuration in the Docker image is `./conf/aws.xml`, listed in <<NATIVE_S3_PING>>. It requires
+ports 7800 (used by TCP) and 9000 (used by FD_SOCK) to be published; therefore the command to start the container is:
+
+   docker run -it --rm --network=host -p 7800:7800 -p 9000:9000 belaban/jgroups
+
+* `-it`: starts an interactive shell (TTY) so we can interact with (e.g.) the Chat demo
+* `--rm`: removes the container when done
+* `--network=host`: picks a `host` network. If omitted, a `bridge` network would be picked by default
+* `-p 7800:7800 -p 9000:9000`: publishes ports `7800` to `7800` and `9000` to `9000`.
+* `belaban/jgroups`: the Docker images hosted on dockerhub.com
+
+NOTE: When using a `host` network, publishing the ports is not necessary, therefore the `-p 7800:7800 -p 9000:9000`
+option can be omitted.
+
+When the Docker container has been started, the entrypoint (`/bin/bash`) shows a readme which explains how to start the
+demos. To for example run Chat, the following command has to be executed:
+
+   chat.sh -props aws.xml -name A -b bucket-name
+
+* `-props aws.xml`: this instructs Chat to use `aws.xml` (described above) as configuration
+* `-name A`: gives each cluster node a unique name. If omitted, a random name will be picked
+* `-b bucket-name`: the name of the S3 bucket. Will be created if it doesn't exist. Note that an exception will be
+    thrown if that name is already in use by a different project.
 
 
 
