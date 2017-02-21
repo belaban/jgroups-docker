@@ -1,5 +1,5 @@
 
-# Use belaban/alpine (contains minimal alpine/openjdk and some packages)
+
 FROM belaban/alpine
 
 LABEL maintainer Bela Ban <belaban@yahoo.com>
@@ -20,14 +20,14 @@ EXPOSE 7800-7900:7800-7900 9000-9100:9000-9100
 
 ENV HOME /opt/jgroups
 #ENV JAVA_HOME /usr/lib/jvm/java
-ENV PATH $PATH:$HOME/jgroups-docker/bin
+ENV PATH $PATH:$HOME/IspnPerfTest/bin
 
 WORKDIR /opt/jgroups
 
 
 ## Download JGroups src code and build JAR
-RUN git clone https://github.com/belaban/jgroups-docker.git
-RUN cd jgroups-docker && ant jar src.jar ## compiles and places JAR in ./dist
+RUN git clone https://github.com/belaban/IspnPerfTest.git
+RUN cd IspnPerfTest && ant
 
 RUN chown -R jgroups.jgroups $HOME/*
 
@@ -39,6 +39,6 @@ USER jgroups
 RUN chmod u+x $HOME/*
 
 
-CMD clear && cat $HOME/jgroups-docker/demos.txt && /bin/bash
+CMD clear && /bin/bash
 
 

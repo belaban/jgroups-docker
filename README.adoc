@@ -361,6 +361,10 @@ Another alternative is to create a Virtual Private Network (VPC), e.g. `172.45.0
 block `172.45.0.1` - `172.45.0.100`. This means that `TCPPING.initial_hosts` needs to have all 100 members of this
 block listed.
 
+==== Elastic File System (EFS) and FILE_PING
+
+==== JDBC / RDS
+
 
 === Running the Docker containers on EC2
 After spinning up an EC2 instance, we're now ready to run the Docker container with image `belaban/jgroups`.
