@@ -136,6 +136,11 @@
             <artifactId>native-s3-ping</artifactId>
             <version>${native-s3.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jgroups.kubernetes</groupId>
+            <artifactId>jgroups-kubernetes</artifactId>
+            <version>1.0.0.Alpha6</version>
+        </dependency>
 
     </dependencies>
     <build>
