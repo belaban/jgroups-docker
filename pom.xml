@@ -139,7 +139,7 @@
         <dependency>
             <groupId>org.jgroups.kubernetes</groupId>
             <artifactId>jgroups-kubernetes</artifactId>
-            <version>1.0.0.Alpha7</version>
+            <version>1.0.0.Alpha8</version>
         </dependency>
 
     </dependencies>
