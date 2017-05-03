@@ -44,4 +44,5 @@ USER jgroups
 # CMD ["-factory ispn", "-cfg IspnPerfTest/conf/dist-sync.xml"]
 
 #CMD $HOME/IspnPerfTest/bin/perf-test.sh -nohup $* &> /tmp/IspnPerfTest.log
-CMD $HOME/IspnPerfTest/bin/perf-test.sh -nohup $*
+## exec replaces the shell with the command so the kill signal can be caught
+CMD exec $HOME/IspnPerfTest/bin/perf-test.sh -nohup $*
