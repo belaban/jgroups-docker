@@ -216,6 +216,15 @@ JGroups manual at http://www.jgroups.org/manual4/index.html shows how to do this
 This section shows how to run Docker containers with the JGroups demo on AWS. Contrary to running locally, we have
 to use a security policy to define which traffic (TCP/UDP/ICMP) to send/receive on which ports.
 
+NOTE: Alternative ways of running JGroups in AWS include (1) creating/customizing an EC2 image and then running a host
+with the image directly (without docker), or (2) using https://aws.amazon.com/ecs[EC2 Container Service (ECS)],
+which runs docker images on a number of EC2 instances. +
+The reason (1) is not discussed here is lazyness :-) I did not want to go through the rather long turnaround times
+of iteratively creating and customizing an AMI. Instead, creating and customizing a docker image and running/testing it
+locally made for much faster turnaround times! +
+Running on ECS (option 2) is similar to what's described here, except that there's no need to spin up EC2 instances
+manually, as this is done by ECS when defining a cluster.
+
 Since IP multicasting is not supported, we also have to switch to TCP as transport and also change the discovery
 protocol (see <<AWS_Discovery>> below).
 
@@ -363,7 +372,21 @@ block listed.
 
 ==== Elastic File System (EFS) and FILE_PING
 
-==== JDBC / RDS
+Another way to run discovery on AWS is https://aws.amazon.com/efs/[Elastic File System (EFS)]. EFS is a distributed file
+system, accessible by all cluster nodes. Any creation of modification of a file by a cluster member is visible by
+every other member.
+
+http://www.jgroups.org/manual4/index.html#FILE_PING[FILE_PING] can therefore be used for discovery; the `location`
+attribute needs to point to a directory mounted by EFS. Reads and writes are performed by EFS.
+
+
+==== JDBC_PING / RDS
+
+http://www.jgroups.org/manual4/index.html#_jdbc_ping[JDBC_PING] uses a table in a database for discovery. In
+conjunction with https://aws.amazon.com/rds[RDS], `JDBC_PING` can be setup to store information in an RDS table.
+
+
+
 
 
 === Running the Docker containers on EC2
@@ -397,6 +420,16 @@ demos. To for example run Chat, the following command has to be executed:
 
 
 == Google Compute Platform (GCP)
+
+There is a separate project https://github.com/jgroups-extras/jgroups-google[jgroups-google] which uses Google
+Cloud Storage for discovery, and provides `GOOGLE_PING2` as discovery protocol.
+
+It is meant to be used with Google Compute Engine nodes that are started manually. To
+run JGroups in Google Container Engine (GKE), which uses Kubernetes under the covers, we recommend to use
+`KUBE_PING` instead.
+
+Refer to http://belaban.blogspot.ch/2017/05/running-infinispan-cluster-with.html for step-by-step instructions on
+how to run a JGroups cluster on GKE.
 
 
 [[demos]]
