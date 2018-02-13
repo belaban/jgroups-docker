@@ -355,7 +355,7 @@ link:http://www.jgroups.org/manual4/index.html#TCPPING_Prot[TCPPING] lists all c
 [source,xml]
 ----
 <TCP bind_port="7800" .../>
-<TCPGOSSIP
+<TCPPING
     initial_hosts="HostA[7800],HostB[7800],HostC[7800],..."
  />
 ----
