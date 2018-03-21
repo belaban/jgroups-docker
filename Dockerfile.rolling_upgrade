@@ -36,7 +36,7 @@ USER jgroups
 ## Download JGroups src code and build JAR
 RUN git clone https://github.com/jgroups-extras/RollingUpgrades \
  && cd RollingUpgrades \
- && mvn package
+ && mvn install
 
 #RUN chown -R jgroups.jgroups $HOME/* \
 #    && chmod -R u+x $HOME/*
