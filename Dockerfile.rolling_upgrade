@@ -8,7 +8,6 @@ ENV HOME /opt/jgroups
 ENV PATH $PATH:$HOME/RollingUpgrade/bin
 WORKDIR /opt/jgroups
 
-COPY settings.xml $HOME/.m2/
 
 #RUN apk update && apk upgrade && apk add --no-cache maven
 
@@ -26,8 +25,11 @@ EXPOSE 7800-7900:7800-7900 9000-9100:9000-9100
 
 USER root
 
-### Not supported by docker as of March 2017:
-#RUN printf "net.core.rmem_max = 20000000\nnet.core.wmem_max = 10000000\n" >> /etc/sysctl.conf
+COPY settings.xml $HOME/.m2/
+RUN chown -R jgroups.jgroups $HOME/.m2
+
+# Run everything below as the jgroups user:
+USER jgroups
 
 
 
@@ -36,14 +38,8 @@ RUN git clone https://github.com/jgroups-extras/RollingUpgrades \
  && cd RollingUpgrades \
  && mvn package
 
-RUN chown -R jgroups.jgroups $HOME/* \
-    && chmod -R u+x $HOME/*
-
-
-# Run everything below as the jgroups user:
-USER jgroups
-
-#COPY conf/log4j2.xml IspnPerfTest/conf/
+#RUN chown -R jgroups.jgroups $HOME/* \
+#    && chmod -R u+x $HOME/*
 
 
 
