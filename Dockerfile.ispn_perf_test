@@ -25,19 +25,20 @@ USER root
 ### Not supported by docker as of March 2017:
 #RUN printf "net.core.rmem_max = 20000000\nnet.core.wmem_max = 10000000\n" >> /etc/sysctl.conf
 
+
+# Run everything below as the jgroups user:
+USER jgroups
+
 ## Download JGroups src code and build JAR
 RUN git clone https://github.com/belaban/IspnPerfTest.git \
  && cd IspnPerfTest \
- && ant
+ && mvn -DskipTests=true install dependency:go-offline
 
 RUN chown -R jgroups.jgroups $HOME/* \
     && chmod -R u+x $HOME/*
 
 
-# Run everything below as the jgroups user:
-USER jgroups
 
-#COPY conf/log4j2.xml IspnPerfTest/conf/
 
 
 # ENTRYPOINT ["IspnPerfTest/bin/perf-test.sh", "-nohup"]
