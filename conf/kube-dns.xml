@@ -48,7 +48,7 @@
               xmit_table_max_compaction_time="30000"/>
     <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
                    max_bytes="8m"/>
-    <pbcast.GMS print_local_addr="true" join_timeout="3000"/>
+    <pbcast.GMS print_local_addr="true" join_timeout="5000"/>
     <MFC max_credits="2M"
          min_threshold="0.4"/>
     <FRAG2 frag_size="60K"  />
