@@ -16,18 +16,19 @@ fi;
 
 FLAGS="-Djava.net.preferIPv4Stack=true -server -Xmx1G -Xms500M -XX:+UseG1GC"
 DEBUG="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8787"
+HUP=""
 
 props=udp.xml
 #aws=false
 bucket=mybucket
-main=org.jgroups.demos.Chat -nohup
+main=org.jgroups.demos.Chat
 
 while [ $# -gt 0 ]
 do
     case $1 in
     -h|--help)
-        printf "\n$0 [-h] [-a] [-props JGroups config file] [-b S3 bucket name] [-r S3 region] [-name node name]\n\
-           (-a: run on AWS)\n\n"
+        printf "\n$0 [-h] [-a] [-o] [-props JGroups config file] [-b S3 bucket name] [-r S3 region] [-name node name]\n\
+           (-a: run on AWS) (-o: nohup)\n\n"
         exit 1
         ;;
     -p|-props)
@@ -40,6 +41,9 @@ do
         ;;
     -a)
         aws=true
+        ;;
+    -o)
+        no_tty=true
         ;;
     -b)
         bucket=$2
@@ -67,12 +71,17 @@ if [[ $aws ]];
        FLAGS="$FLAGS -DJGROUPS_EXTERNAL_ADDR=$ext_addr"
 fi
 
+if [[ $no_tty ]];
+   then
+       HUP="-nohup"
+fi
+
 if [[ $region ]];
     then
         export REGION="-DS3_REGION=$region"
 fi
 
-executable="java $REGION -DS3_BUCKET=$bucket -cp $CP $LOG $FLAGS $main -props $CONF/$props"
+executable="java $REGION -DS3_BUCKET=$bucket -cp $CP $LOG $FLAGS $main $HUP -props $CONF/$props"
 
 if [[ $name ]];
     then
