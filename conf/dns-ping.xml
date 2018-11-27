@@ -29,7 +29,9 @@
     <!--TCPPING
         initial_hosts="172.31.47.164[7800],172.31.43.171[7800]"/-->
 
-    <dns.DNS_PING dns_query="${DNS_QUERY:chat-service}" async_discovery_use_separate_thread_per_request="true" />
+    <dns.DNS_PING dns_query="${DNS_QUERY:chat-service}"
+                  async_discovery_use_separate_thread_per_request="true"
+                  dns_record_type="SRV"/>
 
     <MERGE3 max_interval="30000"
             min_interval="10000"/>
