@@ -20,7 +20,7 @@ DEBUG="-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8787"
 props=udp.xml
 #aws=false
 bucket=mybucket
-main=org.jgroups.demos.Chat
+main=org.jgroups.demos.Chat -nohup
 
 while [ $# -gt 0 ]
 do
