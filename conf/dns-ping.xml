@@ -12,7 +12,7 @@
          external_addr="${JGROUPS_EXTERNAL_ADDR:match-interface:eth0}"
 	     bind_addr="site_local,match-interface:eth0"
          bind_port="${TCP_PORT:7800}"
-         port_range="1"
+         port_range="0"
 
          recv_buf_size="5M"
          send_buf_size="1M"
