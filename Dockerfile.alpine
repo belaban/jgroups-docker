@@ -11,6 +11,7 @@ ENV PATH $MAVEN_HOME/bin:$PATH
 RUN apk update && apk upgrade && apk add --no-cache  \
     apache-ant       \
     bash      \
+    bind-tools \
     curl      \
     git       \
     iptables  \
