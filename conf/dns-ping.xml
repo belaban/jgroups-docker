@@ -32,6 +32,7 @@
     <dns.DNS_PING dns_query="${DNS_QUERY:chat-service}"
                   async_discovery_use_separate_thread_per_request="true"
                   num_discovery_runs="3"
+                  dns_address="${DNS_ADDRESS}"
                   dns_record_type="${DNS_RECORD_TYPE:A}"/>
 
     <MERGE3 max_interval="30000"
