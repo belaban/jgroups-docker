@@ -31,7 +31,8 @@
 
     <dns.DNS_PING dns_query="${DNS_QUERY:chat-service}"
                   async_discovery_use_separate_thread_per_request="true"
-                  num_discovery_runs="3"
+                  probe_transport_ports="${DNS_PROBE_TRANSPORT_PORTS:false}"
+                  num_discovery_runs="1"
                   dns_address="${DNS_ADDRESS}"
                   dns_record_type="${DNS_RECORD_TYPE:A}"/>
 
