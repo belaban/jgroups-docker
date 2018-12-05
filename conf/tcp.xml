@@ -9,8 +9,8 @@
         xmlns="urn:org:jgroups"
         xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
     <TCP
-         external_addr="${JGROUPS_EXTERNAL_ADDR:match-interface:eth0}"
-	     bind_addr="site_local,match-interface:eth0"
+         external_addr="${JGROUPS_EXTERNAL_ADDR}"
+	     bind_addr="match-interface:eth0,match-interface:en0,site-local"
          bind_port="${TCP_PORT:7800}"
          port_range="1"
 
@@ -27,7 +27,7 @@
          thread_pool.keep_alive_time="30000" />
 
     <TCPPING
-        initial_hosts="${TCPPING_INITIAL_HOSTS:127.0.0.1[7800]}"/>
+        initial_hosts="${TCPPING_INITIAL_HOSTS:192.168.1.105[7800]}" />
 
     <MERGE3 max_interval="30000"
             min_interval="10000"/>
