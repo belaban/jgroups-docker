@@ -34,6 +34,8 @@ RUN git clone https://github.com/belaban/IspnPerfTest.git \
  && cd IspnPerfTest \
  && mvn -DskipTests=true install dependency:go-offline
 
+### mvn -B dependency:resolve dependency:resolve-plugins
+
 RUN chown -R jgroups.jgroups $HOME/* \
     && chmod -R u+x $HOME/*
 
