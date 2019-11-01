@@ -122,27 +122,45 @@ by executing `ifconfig` inside the container:
 
 ```
 bash-4.3$ ifconfig
-docker0   Link encap:Ethernet  HWaddr 02:42:33:C7:8E:F1
-          inet addr:172.17.0.1  Bcast:0.0.0.0  Mask:255.255.0.0
-          inet6 addr: fe80::42:33ff:fec7:8ef1%32692/64 Scope:Link
-          UP BROADCAST MULTICAST  MTU:1500  Metric:1
-          RX packets:30 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:20 errors:0 dropped:0 overruns:0 carrier:0
+docker0   Link encap:Ethernet  HWaddr 02:42:14:CB:41:B6
+          inet addr:172.17.0.1  Bcast:172.17.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::42:14ff:fecb:41b6/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:4 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:14 errors:0 dropped:0 overruns:0 carrier:0
           collisions:0 txqueuelen:0
-          RX bytes:1878 (1.8 KiB)  TX bytes:1492 (1.4 KiB)
+          RX bytes:224 (224.0 B)  TX bytes:1068 (1.0 KiB)
 
-eth0      Link encap:Ethernet  HWaddr 0E:C8:A1:0F:39:E6
-          inet addr:172.31.14.130  Bcast:172.31.15.255  Mask:255.255.240.0
-          inet6 addr: fe80::cc8:a1ff:fe0f:39e6%32692/64 Scope:Link
-          UP BROADCAST RUNNING MULTICAST  MTU:9001  Metric:1
-          RX packets:192724 errors:0 dropped:0 overruns:0 frame:0
-          TX packets:128453 errors:0 dropped:0 overruns:0 carrier:0
+eth0      Link encap:Ethernet  HWaddr 02:50:00:00:00:01
+          inet addr:192.168.65.3  Bcast:192.168.65.255  Mask:255.255.255.0
+          inet6 addr: fe80::50:ff:fe00:1/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:37 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:47 errors:0 dropped:0 overruns:0 carrier:0
           collisions:0 txqueuelen:1000
-          RX bytes:138976219 (132.5 MiB)  TX bytes:27369702 (26.1 MiB)
+          RX bytes:3510 (3.4 KiB)  TX bytes:3556 (3.4 KiB)
+
+lo        Link encap:Local Loopback
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:65536  Metric:1
+          RX packets:2 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:2 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1
+          RX bytes:140 (140.0 B)  TX bytes:140 (140.0 B)
+
+veth4ce4999 Link encap:Ethernet  HWaddr 56:5B:F4:6B:D1:20
+          inet6 addr: fe80::545b:f4ff:fe6b:d120/64 Scope:Link
+          inet6 addr: fe80::545b:f4ff:fe6b:d120/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:0 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:21 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0
+          RX bytes:0 (0.0 B)  TX bytes:1618 (1.5 KiB)
 ...
 ```
 
-As can be seen, the interfaces are the same as the host's interfaces. This means that the JGroups configuration doesn't
+As can be seen, `eth0` has an address from the hosts address range. This means that the JGroups configuration doesn't
 require an `external_addr` attribute and can simply define `bind_addr`:
 [source,xml]
 ----
