@@ -62,4 +62,5 @@
     <pbcast.STATE_TRANSFER  />
     <CENTRAL_LOCK />
     <COUNTER/>
+    <STOMP port="9000"/>
 </config>
