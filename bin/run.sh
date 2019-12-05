@@ -81,7 +81,7 @@ if [[ $region ]];
         export REGION="-DS3_REGION=$region"
 fi
 
-executable="java $REGION -DS3_BUCKET=$bucket -cp $CP $LOG $FLAGS $main $HUP -props $CONF/$props"
+executable="java $DEBUG $REGION -DS3_BUCKET=$bucket -cp $CP $LOG $FLAGS $main $HUP -props $CONF/$props"
 
 if [[ $name ]];
     then
