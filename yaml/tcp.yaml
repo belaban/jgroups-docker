@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jgrp
+  labels:
+    run: jgrp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: jgrp
+  template:
+    metadata:
+      labels:
+        run: jgrp
+    spec:
+      containers:
+      - image: belaban/jgroups
+        name: jgrp
+        command: ["chat.sh"]
+        args: ["-props tcp.xml -o"]
+        env:
+          - name: JGROUPS_EXTERNAL_ADDR
+            value: "jgrp"
+          - name: TCPPING_INITIAL_HOSTS
+            value: "jgrp[7800]"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    service.alpha.kubernetes.io/tolerate-unready-endpoints: "true"
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp 
+  name: jgrp
+  labels:
+    run: jgrp
+spec:
+#  publishNotReadyAddresses: true
+#  clusterIP: None
+#  clusterIP: LoadBalancer
+  ports:
+    - name: ping
+      port: 7800
+      protocol: TCP
+      targetPort: 7800
+#    - name: probe
+#      port: 7500
+#      protocol: UDP
+#      targetPort: 7500
+    - name: debug
+      port: 8787
+      protocol: TCP
+      targetPort: 8787
+    - name: stomp
+      port: 9000
+      protocol: TCP
+      targetPort: 9000
+  selector:
+     run: jgrp
+  sessionAffinity: None
+#  type: ClusterIP
+  type: LoadBalancer
+status:
+  loadBalancer: {}
+---
+
+
