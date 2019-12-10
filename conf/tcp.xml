@@ -13,6 +13,8 @@
 	     bind_addr="match-interface:eth0,match-interface:en0,site-local"
          bind_port="${TCP_PORT:7800}"
          port_range="1"
+         client_bind_addr="${TCP_CLIENT_BIND_ADDR}"
+         client_bind_port="${TCP_CLIENT_BIND_PORT}"
 
          recv_buf_size="5M"
          send_buf_size="1M"
