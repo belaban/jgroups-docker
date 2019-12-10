@@ -21,12 +21,12 @@ spec:
         args: ["-props tcp.xml -o"]
         env:
           - name: TCP_PORT
-            value: "7800"
+            value: "12000"
           - name: TCPPING_PORT_RANGE
             value: "0"
-          - name: JGROUPS_EXTERNAL_ADDR
-            value: "a3d59e22a1b4511eaaac802384b7d669-711219896.us-east-1.elb.amazonaws.com"
+#          - name: JGROUPS_EXTERNAL_ADDR
+#            value: "a3d59e22a1b4511eaaac802384b7d669-711219896.us-east-1.elb.amazonaws.com"
           - name: TCPPING_INITIAL_HOSTS
-            value: "a3d59e22a1b4511eaaac802384b7d669-711219896.us-east-1.elb.amazonaws.com[7800]"
+            value: "a3d59e22a1b4511eaaac802384b7d669-711219896.us-east-1.elb.amazonaws.com[12000]"
 
 
