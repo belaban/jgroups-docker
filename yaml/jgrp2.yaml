@@ -5,7 +5,7 @@ metadata:
   labels:
     run: jgrp2
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       run: jgrp2
@@ -19,10 +19,16 @@ spec:
         name: jgrp2
         command: ["chat.sh"]
         args: ["-props tcp.xml -o"]
+        ports:
+          - containerPort: 7900
         env:
           - name: TCP_PORT
-            value: "7850"
-          - name: JGROUPS_EXTERNAL_ADDR
-            value: "a86e6567e1a7711eaaac802384b7d669-2109456829.us-east-1.elb.amazonaws.com"
+            value: "7900"
+          - name: TCPPING_PORT_RANGE
+            value: "0"
+#          - name: JGROUPS_EXTERNAL_ADDR
+#            value: "a3d59e22a1b4511eaaac802384b7d669-711219896.us-east-1.elb.amazonaws.com"
           - name: TCPPING_INITIAL_HOSTS
-            value: "a82d200fd1a7711ea969e0e2826de564-1047104001.us-east-1.elb.amazonaws.com[7800],a86e6567e1a7711eaaac802384b7d669-2109456829.us-east-1.elb.amazonaws.com[7850]"
+            value: "afbea1a011c0911eaaac802384b7d669-1529495313.us-east-1.elb.amazonaws.com [7800]"
+
+

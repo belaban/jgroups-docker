@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jgrp
+  name: echo
   labels:
     run: jgrp
 spec:
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - image: belaban/jgroups
-        name: jgrp
+        name: echo
         command: ["echo-server.sh"]
         args: ["-port 12000"]
         env:

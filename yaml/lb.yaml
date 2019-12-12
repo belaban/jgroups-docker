@@ -11,6 +11,9 @@ spec:
     - port: 7800
       name: jgroups
       protocol: TCP
+    - port: 7900
+      name: jgroups2
+      protocol: TCP
     - port: 12000
       name: echo-server
       protocol: TCP
