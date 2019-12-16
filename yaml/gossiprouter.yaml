@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gossiprouter
+  labels:
+    run: gossiprouter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: gossiprouter
+  template:
+    metadata:
+      labels:
+        run: gossiprouter
+    spec:
+      containers:
+      - image: jboss/jgroups-gossip
+        name: gossiprouter
+        ports:
+          - containerPort: 12001
+        env:
+          - name: LogLevel
+            value: "TRACE"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gossiprouter
+spec:
+  type: NodePort
+  ports:
+    - port: 12001
+      targetPort: 12001
+      name: gossiprouter
+      protocol: TCP
+  selector:
+    run: gossiprouter
+
+

@@ -29,6 +29,6 @@ spec:
 #          - name: JGROUPS_EXTERNAL_ADDR
 #            value: "afbea1a011c0911eaaac802384b7d669-1529495313.us-east-1.elb.amazonaws.com"
           - name: TCPPING_INITIAL_HOSTS
-            value: "afbea1a011c0911eaaac802384b7d669-1529495313.us-east-1.elb.amazonaws.com[7800]"
+            value: "127.0.0.1[7800]"
 
 
