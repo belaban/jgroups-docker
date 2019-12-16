@@ -1,6 +1,6 @@
 
 # Use latest openjdk-lpine image as the base (small footprint)
-FROM openjdk:11-jdk-alpine
+FROM openjdk:8-jdk-alpine
 
 LABEL maintainer Bela Ban <belaban@yahoo.com>
 
