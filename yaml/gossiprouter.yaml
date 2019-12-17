@@ -15,9 +15,16 @@ spec:
         run: gossiprouter
     spec:
       containers:
-      - image: jboss/jgroups-gossip
+      - image: belaban/gossiprouter
         name: gossiprouter
+## Uncomment below to customize the startup of GossipRouter
+#        command: ["java",
+#                  "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:8787",
+#                  "-cp", "/app/resources:/app/classes:/app/libs/*",
+#                  "org.jgroups.stack.GossipRouter",
+#                  "-bind_addr", "0.0.0.0"]
         ports:
+          - containerPort: 8787
           - containerPort: 12001
         env:
           - name: LogLevel
@@ -30,6 +37,10 @@ metadata:
 spec:
   type: NodePort
   ports:
+    - port: 8787
+      targetPort: 8787
+      name: debug
+      protocol: TCP
     - port: 12001
       targetPort: 12001
       name: gossiprouter
