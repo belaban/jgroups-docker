@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gr-nyc
+  labels:
+    run: gr-nyc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: gr-nyc
+  template:
+    metadata:
+      labels:
+        run: gr-nyc
+    spec:
+      containers:
+      - image: belaban/gossiprouter
+        name: gr-nyc
+        ports:
+          - containerPort: 8787
+          - containerPort: 12001
+        env:
+          - name: LogLevel
+            value: "TRACE"
+#          - name: JAVA_TOOL_OPTIONS
+#            value: "-Dlog4j.configurationFile=log4j2.xml -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:8787"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gr-nyc
+spec:
+  type: NodePort
+  ports:
+    - port: 8787
+      targetPort: 8787
+      name: debug
+      protocol: TCP
+    - port: 12001
+      targetPort: 12001
+      name: gossiprouter
+      protocol: TCP
+  selector:
+    run: gr-nyc
+
+

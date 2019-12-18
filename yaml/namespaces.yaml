@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: nyc
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sfo

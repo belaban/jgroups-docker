@@ -18,17 +18,15 @@ spec:
       - image: belaban/jgroups
         name: jgrp
         command: ["chat.sh"]
-        args: ["-props tcp.xml -o"]
+        args: ["-props gossip.xml -o"]
         ports:
           - containerPort: 7800
         env:
           - name: TCP_PORT
             value: "7800"
-          - name: TCPPING_PORT_RANGE
-            value: "0"
 #          - name: JGROUPS_EXTERNAL_ADDR
 #            value: "afbea1a011c0911eaaac802384b7d669-1529495313.us-east-1.elb.amazonaws.com"
-          - name: TCPPING_INITIAL_HOSTS
-            value: "127.0.0.1[7800]"
+          - name: TCPGOSSIP_INITIAL_HOSTS
+            value: "a971cf125218611eaa8bd0a46a85976d-6b8a567484912903.elb.us-east-1.amazonaws.com[7800]"
 
 
