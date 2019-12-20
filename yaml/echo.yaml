@@ -19,11 +19,4 @@ spec:
         name: echo
         command: ["echo-server.sh"]
         args: ["-port 12000"]
-        env:
-          - name: TCP_PORT
-            value: "7800"
-          - name: JGROUPS_EXTERNAL_ADDR
-            value: "a82d200fd1a7711ea969e0e2826de564-1047104001.us-east-1.elb.amazonaws.com"
-          - name: TCPPING_INITIAL_HOSTS
-            value: "a82d200fd1a7711ea969e0e2826de564-1047104001.us-east-1.elb.amazonaws.com[7800],a86e6567e1a7711eaaac802384b7d669-2109456829.us-east-1.elb.amazonaws.com[7850]"
 

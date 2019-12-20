@@ -27,6 +27,6 @@ spec:
 #          - name: JGROUPS_EXTERNAL_ADDR
 #            value: "afbea1a011c0911eaaac802384b7d669-1529495313.us-east-1.elb.amazonaws.com"
           - name: TCPGOSSIP_INITIAL_HOSTS
-            value: "a971cf125218611eaa8bd0a46a85976d-6b8a567484912903.elb.us-east-1.amazonaws.com[7800]"
+            value: "127.0.0.1[12001]"
 
 
