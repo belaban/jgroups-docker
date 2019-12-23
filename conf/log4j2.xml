@@ -14,8 +14,8 @@
             <appender-ref ref="File"/>
         </root>
         <logger name="org.jgroups" level="warn"/>
-        <logger name="org.jgroups.protocols.pbcast.GMS" level="trace"/>
-        <logger name="org.jgroups.protocols.dns"        level="trace"/>
-        <logger name="org.jgroups.protocols.kubernetes" level="trace"/>
+        <logger name="org.jgroups.protocols.pbcast.GMS" level="warn"/>
+        <logger name="org.jgroups.protocols.dns"        level="warn"/>
+        <logger name="org.jgroups.protocols.kubernetes" level="warn"/>
     </loggers>
 </configuration>
