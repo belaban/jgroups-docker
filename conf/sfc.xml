@@ -19,7 +19,7 @@
          thread_pool.max_threads="200"
          thread_pool.keep_alive_time="30000"/>
 
-    <dns.DNS_PING dns_query="${DNS_QUERY:nyc}"
+    <dns.DNS_PING dns_query="${DNS_QUERY:sfc}"
                   async_discovery_use_separate_thread_per_request="true"
                   probe_transport_ports="${DNS_PROBE_TRANSPORT_PORTS:false}"
                   num_discovery_runs="1"
@@ -42,7 +42,7 @@
     <MFC max_credits="2M"
          min_threshold="0.4"/>
     <FRAG2 frag_size="60K"  />
-    <relay.RELAY2 site="${SITE:nyc}">
+    <relay.RELAY2 site="${SITE:sfc}">
         <RelayConfiguration>
             <sites>
                 <site name="sfc">
