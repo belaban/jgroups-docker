@@ -1,0 +1,61 @@
+
+<!--
+  Site-local config
+  Author: Bela Ban
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:org:jgroups"
+        xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
+    <TCP
+         bind_addr="match-interface:eth0,match-interface:en0,site-local"
+         bind_port="7800"
+         recv_buf_size="5M"
+         send_buf_size="5M"
+         max_bundle_size="64K"
+         enable_diagnostics="true"
+
+         thread_pool.min_threads="0"
+         thread_pool.max_threads="200"
+         thread_pool.keep_alive_time="30000"/>
+
+    <dns.DNS_PING dns_query="${DNS_QUERY:jgrp}"
+                  async_discovery_use_separate_thread_per_request="true"
+                  probe_transport_ports="${DNS_PROBE_TRANSPORT_PORTS:false}"
+                  num_discovery_runs="1"
+                  dns_address="${DNS_ADDRESS}"
+                  dns_record_type="${DNS_RECORD_TYPE:A}"/>
+
+    <MERGE3 max_interval="30000"
+            min_interval="10000"/>
+    <FD_SOCK/>
+    <FD_ALL timeout="15000" interval="3000"/>
+    <VERIFY_SUSPECT timeout="1500"  />
+    <pbcast.NAKACK2 xmit_interval="500"
+                    discard_delivered_msgs="true" />
+    <UNICAST3 xmit_interval="500" />
+    <pbcast.STABLE desired_avg_gossip="50000"
+                   max_bytes="8m"/>
+    <pbcast.GMS print_local_addr="true" join_timeout="1000" />
+    <UFC max_credits="2M"
+         min_threshold="0.4"/>
+    <MFC max_credits="2M"
+         min_threshold="0.4"/>
+    <FRAG2 frag_size="60K"  />
+    <relay.RELAY2 site="${SITE:nyc}">
+        <RelayConfiguration>
+            <sites>
+                <site name="sfo">
+                    <bridges>
+                        <bridge name="global" config="tunnel.xml"/>
+                    </bridges>
+                </site>
+                 <site name="nyc">
+                    <bridges>
+                        <bridge name="global" config="tunnel.xml"/>
+                    </bridges>
+                </site>
+            </sites>
+        </RelayConfiguration>
+    </relay.RELAY2>
+</config>
