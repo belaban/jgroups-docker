@@ -10,7 +10,7 @@
         xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
     <TUNNEL
 	     bind_addr="match-interface:eth0,match-interface:en0,site-local"
-         port_range="0"
+         port_range="${PORT_RANGE:0}"
          gossip_router_hosts="${TUNNEL_INITIAL_HOSTS:127.0.0.1[12001]}"
 
          max_bundle_size="64K"
