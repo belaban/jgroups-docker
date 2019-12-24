@@ -47,12 +47,12 @@
             <sites>
                 <site name="sfc">
                     <bridges>
-                        <bridge name="global" config="bridge.xml"/>
+                        <bridge name="bridge" config="bridge.xml"/>
                     </bridges>
                 </site>
                  <site name="nyc">
                     <bridges>
-                        <bridge name="global" config="bridge.xml"/>
+                        <bridge name="bridge" config="bridge.xml"/>
                     </bridges>
                 </site>
             </sites>
