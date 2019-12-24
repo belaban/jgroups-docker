@@ -17,7 +17,7 @@ spec:
       containers:
       - image: belaban/jgroups
         name: sfc
-        command: ["chat.sh"]
+        command: ["relay.sh"]
         args: ["-props sfc.xml -o"]
         ports:
           - containerPort: 7800
