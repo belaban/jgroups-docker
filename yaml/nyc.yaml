@@ -29,7 +29,7 @@ spec:
           - name: DNS_QUERY
             value: nyc
           - name: TUNNEL_INITIAL_HOSTS
-            value: "a618ec546257011eab7290e939514b67-695e802f565187e4.elb.us-east-1.amazonaws.com[12001],a9692b520257211eaa10b0e07ddc8c1f-aa89107390748962.elb.us-west-2.amazonaws.com[12001]"
+            value: "load-balancer-1[12001],load-balancer-2[12001]"
 ---
 apiVersion: v1
 kind: Service
