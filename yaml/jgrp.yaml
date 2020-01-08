@@ -18,7 +18,7 @@ spec:
       - image: belaban/jgroups
         name: jgrp
         command: ["chat.sh"]
-        args: ["-props tunnel.xml -o"]
+        args: ["-props gossip.xml -o"]
         ports:
           - containerPort: 7800
         env:
