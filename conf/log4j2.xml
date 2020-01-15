@@ -5,9 +5,9 @@
             <!--PatternLayout pattern="%-7d{HH:mm:ss,SSS} [%p] %c: %m%n"/-->
             <PatternLayout pattern="%r [%p] %c{1}: %m%n"/> 
         </Console>
-        <File name="File" fileName="jgroups.log">
+        <!--File name="File" fileName="jgroups.log">
             <PatternLayout pattern="%r [%p] %c{1}: %m%n"/>
-        </File>
+        </File-->
     </appenders>
     <loggers>
         <root level="warn">
