@@ -25,6 +25,7 @@ spec:
 #                  "-bind_addr", "0.0.0.0"]
         ports:
           - containerPort: 8787
+          - containerPort: 9000
           - containerPort: 12001
         env:
           - name: LogLevel
