@@ -1,0 +1,53 @@
+
+<!--
+  TCP-based configuration for running on Kubernetes
+
+  Author: Bela Ban
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="urn:org:jgroups"
+        xsi:schemaLocation="urn:org:jgroups http://www.jgroups.org/schema/jgroups.xsd">
+    <UDP
+         ip_mcast="false"
+         external_addr="${JGROUPS_EXTERNAL_ADDR}"
+	     bind_addr="match-interface:eth0,match-interface:en0,site-local"
+         bind_port="${TCP_PORT:7800}"
+         port_range="1"
+         max_bundle_size="64K"
+         enable_diagnostics="true"
+         thread_pool.min_threads="0"
+         thread_pool.max_threads="500"
+         thread_pool.keep_alive_time="30000" />
+
+    <TCPGOSSIP
+        initial_hosts="${TCPGOSSIP_INITIAL_HOSTS:127.0.0.1[12001]}"
+        return_entire_cache="true"/>
+
+    <MERGE3 max_interval="30000"
+            min_interval="10000"/>
+    <FD_SOCK external_addr="${JGROUPS_EXTERNAL_ADDR}"
+             start_port="${FD_SOCK_PORT:9000}"/>
+    <FD_ALL timeout="10000" interval="3000"/>
+    <VERIFY_SUSPECT timeout="1500"  />
+    <BARRIER />
+    <pbcast.NAKACK2 xmit_interval="500"
+                    xmit_table_num_rows="100"
+                    xmit_table_msgs_per_row="2000"
+                    xmit_table_max_compaction_time="30000"
+                    use_mcast_xmit="false"
+                    discard_delivered_msgs="true" />
+    <UNICAST3
+              xmit_table_num_rows="100"
+              xmit_table_msgs_per_row="1000"
+              xmit_table_max_compaction_time="30000"/>
+    <pbcast.STABLE stability_delay="1000" desired_avg_gossip="50000"
+                   max_bytes="8m"/>
+    <pbcast.GMS print_local_addr="true" join_timeout="3000"/>
+    <MFC max_credits="2M"
+         min_threshold="0.4"/>
+    <FRAG2 frag_size="60K"  />
+    <pbcast.STATE_TRANSFER  />
+    <CENTRAL_LOCK />
+    <COUNTER/>
+</config>
