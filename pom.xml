@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.jgroups.aws.s3</groupId>
-    <artifactId>native-s3-ping</artifactId>
+    <groupId>org.jgroups.docker</groupId>
+    <artifactId>jgroups-docker</artifactId>
     <packaging>bundle</packaging>
-    <name>native-s3-ping</name>
+    <name>jgroups-docker</name>
     <version>1.0.0-SNAPSHOT</version>
-    <url>http://www.github.com/jgroups-extras/native-s3-ping</url>
+    <url>http://www.github.com/belaban/jgroups-docker</url>
 
     <properties>
         <jgroups.version>4.2.4.Final</jgroups.version>
@@ -21,7 +21,7 @@
     </properties>
 
     <description>
-        Discovery protocol for S3 based on Zalando's original implementation (see README for details)
+        Creates a docker image with JGroups inside
     </description>
 
     <organization>
@@ -30,12 +30,6 @@
     </organization>
 
     <developers>
-        <developer>
-            <name>Tobias Sarnowski</name>
-            <email>tobias.sarnowski@zalando.de</email>
-            <organization>Zalando SE</organization>
-            <organizationUrl>http://tech.zalando.com/</organizationUrl>
-        </developer>
         <developer>
             <name>Bela Ban</name>
             <email>belaban@yahoo.com</email>
@@ -50,14 +44,14 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git://github.com/jgroups-extras/native-s3-ping.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/jgroups-extras/native-s3-ping.git</developerConnection>
-        <url>https://github.com/belaban/JGroups</url>
+        <connection>scm:git:git://github.com/belaban/jgroups-docker.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/belaban/jgroups-docker.git</developerConnection>
+        <url>https://github.com/belaban/jgroups-docker</url>
     </scm>
 
     <issueManagement>
         <system>jira</system>
-        <url>https://github.com/jgroups-extras/native-s3-ping/issues</url>
+        <url>https://github.com/belaban/jgroups-docker/issues</url>
     </issueManagement>
 
     <distributionManagement>
@@ -130,11 +124,6 @@
             <groupId>org.jgroups</groupId>
             <artifactId>jgroups</artifactId>
             <version>${jgroups.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jgroups.aws.s3</groupId>
-            <artifactId>native-s3-ping</artifactId>
-            <version>${native-s3.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jgroups.kubernetes</groupId>
