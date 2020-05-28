@@ -2,7 +2,7 @@
 # Use belaban/alpine (contains minimal alpine/openjdk and some packages)
 FROM belaban/alpine
 
-LABEL maintainer Bela Ban <belaban@yahoo.com>
+LABEL maintainer="Bela Ban <belaban@yahoo.com>"
 
 
 # Create a user and group used to launch processes
